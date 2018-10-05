@@ -2,7 +2,7 @@
 //  Define Data Sources
 // --------------------------------
 
-let posts_list = async () => {
+let getPostsList = async () => {
      const options = {
         method: 'GET',
         headers: {
@@ -21,8 +21,7 @@ let posts_list = async () => {
 
 let Home = {
     render : async () => {
-        let posts = await posts_list()
-        // console.log(posts)
+        let posts = await getPostsList()
         let view =  `
             <h1> Home </h1>
             <ul>
@@ -35,6 +34,5 @@ let Home = {
         return view
     }
 }
-
 
 export default Home;
