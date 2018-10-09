@@ -1,6 +1,16 @@
 let About = {
 
-    render : async () => `<h1> About </h1>`
+    render : async () => {
+
+        return /*html*/`
+        <h1> ZZZZZZZZZZZZZZ </h1>
+        <button id="myBtn" type="button" onclick="myFunction()">Try it</button>
+
+        <script>
+
+        </script>
+    `
+    }
 }
 
 export default About;

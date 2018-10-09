@@ -15,8 +15,6 @@ const Utils = {
         request.id          = r[2]
         request.verb        = r[3]
 
-        console.log('returning parsed URL')
-        console.log(request)
         return request
     }
 

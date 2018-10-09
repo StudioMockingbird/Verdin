@@ -1,4 +1,4 @@
-import Utils        from './../../services/Utils'
+import Utils        from './../../services/Utils.js'
 
 let getPost = async (id) => {
     const options = {
@@ -8,7 +8,7 @@ let getPost = async (id) => {
        }
    };
    try {
-       const response = await fetch(`http://5bb634f6695f8d001496c082.mockapi.io/api/posts/` + id, options)
+       const response = await fetch(`https://5bb634f6695f8d001496c082.mockapi.io/api/posts/` + id, options)
        const json = await response.json();
        // console.log(json)
        return json

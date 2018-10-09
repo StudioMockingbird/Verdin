@@ -1,14 +1,16 @@
-import Home         from './views/pages/Home'
-import About        from './views/pages/About'
-import Error404     from './views/pages/Error404'
-import PostShow     from './views/pages/PostShow'
+import Home         from './views/pages/Home.js'
+import About        from './views/pages/About.js'
+import Error404     from './views/pages/Error404.js'
+import PostShow     from './views/pages/PostShow.js'
+import Register     from './views/pages/Register.js'
 
-import Utils        from './services/Utils'
+import Utils        from './services/Utils.js'
 
 const routes = {
-    '/'         : Home
-    , '/about'  : About
-    , '/p/:id'  : PostShow
+    '/'             : Home
+    , '/about'      : About
+    , '/p/:id'      : PostShow
+    , '/register'   : Register
 
 };
 
@@ -25,6 +27,7 @@ const router = async () => {
     content.innerHTML = await page.render();
   
 }
+
 // Listen on hash change:
 window.addEventListener('hashchange', router);
 // Listen on page load:
