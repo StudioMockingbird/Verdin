@@ -22,7 +22,7 @@ let getPostsList = async () => {
 let Home = {
     render : async () => {
         let posts = await getPostsList()
-        let view =  `
+        let view =  /*html*/`
             <h1> Home </h1>
             <ul>
                 ${ posts.map(post => 
