@@ -23,13 +23,15 @@ let Home = {
     render : async () => {
         let posts = await getPostsList()
         let view =  /*html*/`
-            <h1> Home </h1>
-            <ul>
-                ${ posts.map(post => 
-                    `<li><a href="#/p/${post.id}">${post.title}</a></li>`
-                    ).join('\n ')
-                }
-            </ul>
+            <section class="section">
+                <h1> Home </h1>
+                <ul>
+                    ${ posts.map(post => 
+                        /*html*/`<li><a href="#/p/${post.id}">${post.title}</a></li>`
+                        ).join('\n ')
+                    }
+                </ul>
+            </section>
         `
         return view
     }

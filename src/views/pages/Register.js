@@ -2,7 +2,7 @@ let Register = {
 
     render: async () => {
         return /*html*/ `
-            <article>
+            <section class="section">
                 <div class="field">
                     <p class="control has-icons-left has-icons-right">
                         <input class="input" id="email_input" type="email" placeholder="Enter your Email">
@@ -38,7 +38,7 @@ let Register = {
                     </p>
                 </div>
 
-            </article>
+            </section>
         `
     }
     // All the code related to DOM interactions and controls go in here.

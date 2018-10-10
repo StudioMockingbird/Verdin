@@ -23,12 +23,13 @@ let PostShow = {
         let request = Utils.parseRequestURL()
         let post = await getPost(request.id)
         
-        return `
-            <h1> Post Id : ${post.id}</h1>
-            <p> Post Title : ${post.title} </p>
-            <p> Post Content : ${post.content} </p>
-            <p> Post Author : ${post.name} </p>
-
+        return /*html*/`
+            <section class="section">
+                <h1> Post Id : ${post.id}</h1>
+                <p> Post Title : ${post.title} </p>
+                <p> Post Content : ${post.content} </p>
+                <p> Post Author : ${post.name} </p>
+            </section>
         `
     }
     , after_render: async () => {

@@ -1,7 +1,9 @@
 let About = {
     render : async () => {
         let view =  /*html*/`
-            <h1> About </h1>
+            <section class="section">
+                <h1> About </h1>
+            </section>
         `
         return view
     },
