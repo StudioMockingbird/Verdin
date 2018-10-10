@@ -44,7 +44,7 @@ let Register = {
                 </div>
                 <div class="field">
                     <p class="control">
-                        <button class="button is-primary" onclick='${handleSubmit}()' id="register_submit_btn">
+                        <button class="button is-primary" id="register_submit_btn">
                         Register
                         </button>
                     </p>
@@ -55,6 +55,12 @@ let Register = {
      
 
         `
+    }
+    , after_render: async () => {
+        document.getElementById("register_submit_btn").addEventListener ("click",  () => {
+            console.log('Yo')
+            alert('Yo')
+        })
     }
 }
 
