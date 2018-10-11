@@ -19,9 +19,16 @@ const routes = {
     , '/register'   : Register
 };
 
+const progressbar_setWidth = (p) => {
+    const progressBar = document.getElementById('progress-bar');
+    progressBar.style.visibility = 'visible';
+    progressBar.style.width = `${p}`;
+}
 
 // The router code. Takes a URL, checks against the list of supported routes and then renders the corresponding content page.
 const router = async () => {
+    progressbar_setWidth('60%')
+
 
     // Lazy load view element:
     const header = null || document.getElementById('header_container');
@@ -46,8 +53,19 @@ const router = async () => {
     let page = routes[parsedURL] ? routes[parsedURL] : Error404
     content.innerHTML = await page.render();
     await page.after_render();
+
+    progressbar_setWidth('100%')
   
 }
+
+// reset the progress bar to 0 when trasition is over
+document.getElementById('progress-bar').addEventListener("transitionend", () => {
+    // If cluase here causes the bar to reset only when the width is 100%
+    if (document.getElementById('progress-bar').style.width == '100%') {
+        document.getElementById('progress-bar').style.visibility = "hidden";
+        document.getElementById('progress-bar').style.width = '0%';
+    }
+});
 
 // Listen on hash change:
 window.addEventListener('hashchange', router);

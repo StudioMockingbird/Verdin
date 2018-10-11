@@ -8,7 +8,7 @@ let getPost = async (id) => {
        }
    };
    try {
-       const response = await fetch(`http://5bb634f6695f8d001496c082.mockapi.io/api/posts/` + id, options)
+       const response = await fetch(`https://5bb634f6695f8d001496c082.mockapi.io/api/posts/` + id, options)
        const json = await response.json();
        // console.log(json)
        return json
@@ -24,7 +24,7 @@ let PostShow = {
         let post = await getPost(request.id)
         
         return /*html*/`
-            <section class="section">
+            <section class="section pageEntry">
                 <h1> Post Id : ${post.id}</h1>
                 <p> Post Title : ${post.title} </p>
                 <p> Post Content : ${post.content} </p>

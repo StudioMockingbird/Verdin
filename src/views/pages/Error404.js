@@ -2,7 +2,7 @@ let Error404 = {
 
     render : async () => {
         let view =  /*html*/`
-            <section class="section">
+            <section class="section pageEntry">
                 <h1> 404 Error </h1>
             </section>
         `
