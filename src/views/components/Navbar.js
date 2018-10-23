@@ -30,12 +30,20 @@ let Navbar = {
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <a class="button is-primary" href="/#/register">
+                                ${ !window.localStorage.getItem('_user_username')
+                                
+                                    ? 
+                                    /*html*/`<a class="button is-primary" href="/#/register">
                                         <strong>Sign up</strong>
                                     </a>
-                                    <a class="button is-light">
+                                    <a class="button is-light" href="/#/login">
                                         Log in
-                                    </a>
+                                    </a>`
+                                    :
+                                    /*html*/`<a class="button is-primary" href="/#/logout">
+                                        <strong>Logout</strong>
+                                    </a>`
+                                }
                                 </div>
                             </div>
                         </div>

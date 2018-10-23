@@ -1,22 +1,27 @@
 "use strict";
 
+import Auth         from './services/Auth.js'
+import Utils        from './services/Utils.js'
+
 import Home         from './views/pages/Home.js'
 import About        from './views/pages/About.js'
 import Error404     from './views/pages/Error404.js'
 import PostShow     from './views/pages/PostShow.js'
+import Login        from './views/pages/Login.js'
+import Logout        from './views/pages/Logout.js'
 import Register     from './views/pages/Register.js'
 
 import Navbar       from './views/components/Navbar.js'
 import Bottombar    from './views/components/Bottombar.js' 
-
-import Utils        from './services/Utils.js'
 
 // List of supported routes. Any url other than these routes will throw a 404 error
 const routes = {
     '/'             : Home
     , '/about'      : About
     , '/p/:id'      : PostShow
+    , '/login'      : Login
     , '/register'   : Register
+    , '/logout'     : Logout
 };
 
 const progressbar_setWidth = (p) => {
@@ -70,5 +75,12 @@ document.getElementById('progress-bar').addEventListener("transitionend", () => 
 // Listen on hash change:
 window.addEventListener('hashchange', router);
 
+// List of all housekeepings services to run on new server request
+const houseKeeping = () => {
+    Auth.check()
+    router()
+}
+
 // Listen on page load:
-window.addEventListener('load', router);
+window.addEventListener('load', houseKeeping);
+

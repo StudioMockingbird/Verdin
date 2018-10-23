@@ -1,3 +1,28 @@
+let create_user = async (email, nick, password) => {
+    const payload = {
+        "username": email,
+        "password": password,
+        "nickname" : nick,
+      }
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+    try {
+        const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/signup`, options)
+        const json = await response.json();
+        json.responseCode = response.status
+        console.log(json)
+        return json
+    } catch (err) {
+        console.log('Error getting documents', err)
+    }
+}
+
 let Register = {
 
     render: async () => {
@@ -13,6 +38,19 @@ let Register = {
                             <i class="fas fa-check"></i>
                         </span>
                     </p>
+                    <p class="help is-danger">This email is invalid</p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" id="nickname_input" type="text" placeholder="Enter a Nickname that everyone can see">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </p>
+                    <p class="help is-danger">This email is invalid</p>
                 </div>
                 <div class="field">
                     <p class="control has-icons-left">
@@ -21,6 +59,7 @@ let Register = {
                             <i class="fas fa-lock"></i>
                         </span>
                     </p>
+                    <p class="help is-danger">This email is invalid</p>
                 </div>
                 <div class="field">
                     <p class="control has-icons-left">
@@ -29,6 +68,7 @@ let Register = {
                             <i class="fas fa-lock"></i>
                         </span>
                     </p>
+                    <p class="help is-danger">This email is invalid</p>
                 </div>
                 <div class="field">
                     <p class="control">
@@ -44,17 +84,24 @@ let Register = {
     // All the code related to DOM interactions and controls go in here.
     // This is a separate call as these can be registered only after the DOM has been painted
     , after_render: async () => {
-        document.getElementById("register_submit_btn").addEventListener ("click",  () => {
-            let email       = document.getElementById("email_input");
-            let pass        = document.getElementById("pass_input");
-            let repeatPass  = document.getElementById("repeat_pass_input");
-            if (pass.value != repeatPass.value) {
+        document.getElementById("register_submit_btn").addEventListener ("click", async () => {
+            let email       = document.getElementById("email_input").value;
+            let nick        = document.getElementById("nickname_input").value;
+            let pass        = document.getElementById("pass_input").value;
+            let repeatPass  = document.getElementById("repeat_pass_input").value;
+            if (pass != repeatPass) {
                 alert (`The passwords dont match`)
-            } else if (email.value =='' | pass.value == '' | repeatPass == '') {
+            } else if (email =='' | nick =='' | pass == '' | repeatPass == '') {
                 alert (`The fields cannot be empty`)
-            } 
-            else {
-                alert(`User with email ${email.value} was successfully submitted!`)
+            } else {
+                let result = await create_user(email, nick, pass)
+                if (result.success == true) {
+                    alert (`User with emailid ${email} was successfully created`)
+                } else {
+                    alert (`Failed: ${result.errorMessage}`)
+                }
+
+                // alert(`User with email ${email.value} was successfully submitted!`)
             }    
         })
     }

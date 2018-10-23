@@ -1,20 +1,18 @@
 #progress-bar {
-    /* Remain on top */
+    /* The bar is rendered at the top of the page, overlaid on other components */
     position: fixed;
     top: 0;
- 
-    /* Thickness & Color */
+    z-index:9999;
+
     height: 3px;
     background:red;
     width: 0%;
  
-    /* How fast progress happens */
+    /* width changes from 0% to n% in this time interval */
     transition: width 1.2s;
- 
-    /* Display on top of everything */
-    z-index:9999;
  }
 
+ /* Fade in animation for new pages */
  .pageEntry {animation:fade-in .7s;}
 @keyframes fade-in {
     from {opacity:0;}
