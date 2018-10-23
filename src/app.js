@@ -37,6 +37,7 @@ const progressbar_setWidth = (p) => {
 
 // The router code. Takes a URL, checks against the list of supported routes and then renders the corresponding content page.
 const router = async () => {
+    document.getElementById('progress-bar').style.transition='width 1.5s';
     progressbar_setWidth('60%')
 
 
@@ -81,6 +82,7 @@ const router = async () => {
     content.innerHTML = await page.render();
     await page.after_render();
 
+    document.getElementById('progress-bar').style.transition='width 0.2s';
     progressbar_setWidth('100%')
   
 }
