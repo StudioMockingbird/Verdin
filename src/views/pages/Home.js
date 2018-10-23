@@ -10,7 +10,7 @@ let getPostsList = async () => {
         }
     };
     try {
-        const response = await fetch(`https://5bb634f6695f8d001496c082.mockapi.io/api/posts`, options)
+        const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/getAllPosts`, options)
         const json = await response.json();
         // console.log(json)
         return json
@@ -22,13 +22,14 @@ let getPostsList = async () => {
 let Home = {
     onlyAllow: 'all',
     render : async () => {
-        let posts = await getPostsList()
+        let result = await getPostsList()
+        let posts = result.data
         let view =  /*html*/`
             <section class="section pageEntry">
                 <h1> Home </h1>
                 <ul>
                     ${ posts.map(post => 
-                        /*html*/`<li><a href="#/p/${post.id}">${post.title}</a></li>`
+                        /*html*/`<li><a href="#/p/${post._key}">${post.title}</a></li>`
                         ).join('\n ')
                     }
                 </ul>
