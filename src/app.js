@@ -14,6 +14,9 @@ import Register     from './views/pages/Register.js'
 import Navbar       from './views/components/Navbar.js'
 import Bottombar    from './views/components/Bottombar.js' 
 
+// Check Auth on page load. Do this before everything else
+// window.addEventListener('load', Auth.check());
+
 // List of supported routes. Any url other than these routes will throw a 404 error
 const routes = {
     '/'             : Home

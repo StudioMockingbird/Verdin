@@ -40,22 +40,14 @@ let Auth = {
         // console.log(store['_user_username'])
         if (store['_user_username']) {
             let authStatus = await checkAuthStatus()
-            // console.log(store.getItem('_user_username'))
             store.setItem('_user_username', authStatus.data.username)
             store.setItem('_user_nickname', authStatus.data.nickname)
             store.setItem('_user_flair', authStatus.data.flair)
         } else {
-            store.setItem('_user_username', null)
-            store.setItem('_user_nickname', null)
-            store.setItem('_user_flair', null)
+            store.setItem('_user_username', '')
+            store.setItem('_user_nickname', '')
+            store.setItem('_user_flair', '')
         }
-    },
-    logout : async () => {
-        store.setItem('_user_username', null)
-        store.setItem('_user_nickname', null)
-        store.setItem('_user_flair', null)
-
-        logoutUser()
     }
 }
 

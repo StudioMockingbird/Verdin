@@ -80,6 +80,9 @@ let Login = {
                     store.setItem('_user_username', result.data.username)
                     store.setItem('_user_nickname', result.data.nickname)
                     store.setItem('_user_flair', result.data.flair)
+
+                    
+                    // TODO - if user has a back histroy, do window.history.back()
                     window.location = '/'
                 } else if (result.code == 401) {
                     flash.setAttribute('data-state', 'shown')

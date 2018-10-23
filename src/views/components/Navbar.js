@@ -29,22 +29,31 @@ let Navbar = {
                         </div>
                         <div class="navbar-end">
                             <div class="navbar-item">
-                                <div class="buttons">
-                                ${ !window.localStorage.getItem('_user_username')
-                                
-                                    ? 
-                                    /*html*/`<a class="button is-primary" href="/#/register">
-                                        <strong>Sign up</strong>
-                                    </a>
-                                    <a class="button is-light" href="/#/login">
-                                        Log in
-                                    </a>`
-                                    :
-                                    /*html*/`<a class="button is-primary" href="/#/logout">
-                                        <strong>Logout</strong>
-                                    </a>`
-                                }
-                                </div>
+                            ${ window.localStorage['_user_username']
+                            ?
+                                /*html*/`<div class="field is-grouped" id="show_onauth_navitems">
+                                    <div class="control">
+                                        <a class="button is-light" href="/#/logout">
+                                            Logout
+                                        </a>
+                                    </div>
+                                </div>`
+                            :
+
+                                /*html*/`<div class="field is-grouped" id="hide_onauth_navitems">
+                                <div class="control">
+                                        <a class="button is-primary" href="/#/register">
+                                            <strong>Sign up</strong>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <a class="button is-light" href="/#/login">
+                                            Log in
+                                        </a>
+                                    </div>
+                                </div>`
+                            }
+    
                             </div>
                         </div>
                     </div>

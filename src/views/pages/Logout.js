@@ -26,20 +26,18 @@ let Logout = {
         return view
     },
     after_render: async () => {
-        let store       = window.localStorage
-
-        // store.setItem('_user_username', null)
-        // store.setItem('_user_nickname', null)
-        // store.setItem('_user_flair', null)
-
-        let result = await logoutUser()
+        let result  = await logoutUser()
+        let store   = window.localStorage
         if (result.success) {
+            store.setItem('_user_username', '')
+            store.setItem('_user_nickname', '')
+            store.setItem('_user_flair', '')
             console.log('Successfully logged out')
+            window.location = '/'
         } else {
             console.log('Error in logging out')
             console.log(result)
         }
-        window.location = '/'
     }
 }
 

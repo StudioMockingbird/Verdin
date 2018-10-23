@@ -16,8 +16,8 @@
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
-    "browser-sync": "^2.26.0",
-    "rollup": "^0.66.4"
+    "browser-sync": "^2.26.3",
+    "rollup": "^0.66.6"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
