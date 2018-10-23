@@ -24,6 +24,7 @@ let create_user = async (email, nick, password) => {
 }
 
 let Register = {
+    onlyAllow: 'anon',
 
     render: async () => {
         return /*html*/ `

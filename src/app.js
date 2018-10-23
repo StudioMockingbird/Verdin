@@ -6,9 +6,10 @@ import Utils        from './services/Utils.js'
 import Home         from './views/pages/Home.js'
 import About        from './views/pages/About.js'
 import Error404     from './views/pages/Error404.js'
+import PostNew      from './views/pages/PostNew.js'
 import PostShow     from './views/pages/PostShow.js'
 import Login        from './views/pages/Login.js'
-import Logout        from './views/pages/Logout.js'
+import Logout       from './views/pages/Logout.js'
 import Register     from './views/pages/Register.js'
 
 import Navbar       from './views/components/Navbar.js'
@@ -22,6 +23,7 @@ const routes = {
     '/'             : Home
     , '/about'      : About
     , '/p/:id'      : PostShow
+    , '/p/new'      : PostNew
     , '/login'      : Login
     , '/register'   : Register
     , '/logout'     : Logout
@@ -39,9 +41,9 @@ const router = async () => {
 
 
     // Lazy load view element:
-    const header = null || document.getElementById('header_container');
-    const content = null || document.getElementById('page_container');
-    const footer = null || document.getElementById('footer_container');
+    const header    = null || document.getElementById('header_container');
+    const content   = null || document.getElementById('page_container');
+    const footer    = null || document.getElementById('footer_container');
     
     // Render the Header and footer of the page
     header.innerHTML = await Navbar.render();
@@ -49,16 +51,33 @@ const router = async () => {
     footer.innerHTML = await Bottombar.render();
     await Bottombar.after_render();
 
-
     // Get the parsed URl from the addressbar
     let request = Utils.parseRequestURL()
-
+    
+    // Check if the route already exists, if it does, then render that page
+    // If not then check if it is a dynamic route. If yes, then parse the url, else route to 404
     // Parse the URL and if it has an id part, change it with the string ":id"
-    let parsedURL = (request.resource ? '/' + request.resource : '/') + (request.id ? '/:id' : '') + (request.verb ? '/' + request.verb : '')
+    let parsedURL = 
+        routes[location.hash.slice(1).toLowerCase() || '/']
+        ?
+        (location.hash.slice(1).toLowerCase() || '/')
+        :
+        ((request.resource ? '/' + request.resource : '/') + (request.id ? '/:id' : '') + (request.verb ? '/' + request.verb : ''))
     
     // Get the page from our hash of supported routes.
     // If the parsed URL is not in our list of supported routes, select the 404 page instead
     let page = routes[parsedURL] ? routes[parsedURL] : Error404
+
+    // Client side Auth Guard
+    // If the page has a onlyAllow property, reoute the page appropriately or send user to login page
+    if (page.onlyAllow == 'user') {
+        // console.log('Only User')
+        page = window.localStorage['_user_username'] ? page : Login
+
+    } else if (page.onlyAllow == 'anon') {
+        // console.log('Only Anon')
+        page = !window.localStorage['_user_username'] ? page : Home
+    } 
     content.innerHTML = await page.render();
     await page.after_render();
 

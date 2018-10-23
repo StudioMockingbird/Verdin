@@ -17,6 +17,7 @@ let logoutUser = async () => {
 }
 
 let Logout = {
+    onlyAllow: 'user',
     render : async () => {
         let view =  /*html*/`
             <section class="section pageEntry">

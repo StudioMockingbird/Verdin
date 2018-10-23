@@ -1,15 +1,15 @@
-let Error404 = {
-    onlyAllow: 'all',
-
+let PostNew = {
+    onlyAllow: 'user',
     render : async () => {
         let view =  /*html*/`
             <section class="section pageEntry">
-                <h1> 404 Error </h1>
+                <h1> Add a new post </h1>
             </section>
         `
         return view
-    }
-    , after_render: async () => {
-    }
+    },
+    after_render: async () => {}
+        
 }
-export default Error404;
+
+export default PostNew;

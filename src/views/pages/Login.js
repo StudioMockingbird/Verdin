@@ -21,7 +21,7 @@ let login_user = async (email, password) => {
     }
 }
 let Login = {
-
+    onlyAllow: 'anon',
     render: async () => {
         return /*html*/ `
             <section class="section pageEntry">

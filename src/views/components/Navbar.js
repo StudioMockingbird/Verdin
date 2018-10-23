@@ -33,6 +33,11 @@ let Navbar = {
                             ?
                                 /*html*/`<div class="field is-grouped" id="show_onauth_navitems">
                                     <div class="control">
+                                        <a class="button is-primary" href="/#/p/new">
+                                            <strong>New Post</strong>
+                                        </a>
+                                    </div>
+                                    <div class="control">
                                         <a class="button is-light" href="/#/logout">
                                             Logout
                                         </a>
@@ -41,7 +46,7 @@ let Navbar = {
                             :
 
                                 /*html*/`<div class="field is-grouped" id="hide_onauth_navitems">
-                                <div class="control">
+                                    <div class="control">
                                         <a class="button is-primary" href="/#/register">
                                             <strong>Sign up</strong>
                                         </a>

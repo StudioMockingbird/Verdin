@@ -20,6 +20,7 @@ let getPostsList = async () => {
 }
 
 let Home = {
+    onlyAllow: 'all',
     render : async () => {
         let posts = await getPostsList()
         let view =  /*html*/`

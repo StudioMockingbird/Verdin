@@ -1,4 +1,5 @@
 let About = {
+    onlyAllow: 'user',
     render : async () => {
         let view =  /*html*/`
             <section class="section pageEntry">
