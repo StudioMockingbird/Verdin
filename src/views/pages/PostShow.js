@@ -1,17 +1,23 @@
 import Utils        from './../../services/Utils.js'
 import Error404     from './Error404.js'
 
-let getPost = async (id) => {
+let getPost = async (slug) => {
+    const payload = {
+        "slug": slug,
+    }
+
     const options = {
-       method: 'GET',
-       headers: {
-           'Content-Type': 'application/json'
-       }
-   };
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
    try {
-       const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/getPost/${id}`, options)
+       const response = await fetch(`http://localhost:3000/read_post`, options)
        const json = await response.json();
-    //    console.log(json)
+       console.log(json)
        return json
    } catch (err) {
        console.log('Error getting documents', err)
@@ -24,17 +30,19 @@ let PostShow = {
         let request = Utils.parseRequestURL()
         let post = await getPost(request.id)
 
-        if (post.success) {
+        if (post.status == "success") {
             return /*html*/`
                 <section class="section pageEntry">
-                    <h1> Post Id        : ${post.data._key}</h1>
+                    <h1> Post Id        : ${post.data.unqid}</h1>
                     <p> Post Title      : ${post.data.title} </p>
                     <p> Post Content    : ${post.data.content} </p>
-                    <p> Post Author     : ${post.data.author} </p>
+                    <p> Post Author     : ${post.data.user_nick} </p>
                 </section>
             `
-        } else {
+        } else if (post.status == "404" ){
             return Error404.render()
+        } else {
+            console.log(post)
         }
         
 

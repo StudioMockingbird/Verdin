@@ -7,9 +7,10 @@ let logoutUser = async () => {
         }
     };
     try {
-        const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/logout`, options)
+        const response = await fetch(`http://localhost:3000/logout`, options)
+        console.log(response)
         const json = await response.json();
-        // console.log(json)
+        console.log(json)
         return json
     } catch (err) {
         console.log('Error getting documents', err)
@@ -29,8 +30,8 @@ let Logout = {
     after_render: async () => {
         let result  = await logoutUser()
         let store   = window.localStorage
-        if (result.success) {
-            store.setItem('_user_username', '')
+        if (result.status == "success") {
+            store.setItem('_user_email', '')
             store.setItem('_user_nickname', '')
             store.setItem('_user_flair', '')
             console.log('Successfully logged out')

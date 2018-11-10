@@ -1,6 +1,6 @@
 let login_user = async (email, password) => {
     const payload = {
-        "username": email,
+        "email": email,
         "password": password,
       }
     const options = {
@@ -12,7 +12,7 @@ let login_user = async (email, password) => {
         body: JSON.stringify(payload)
     };
     try {
-        const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/login`, options)
+        const response = await fetch(`http://localhost:3000/login`, options)
         const json = await response.json();
         console.log(json)
         return json
@@ -27,8 +27,6 @@ let Login = {
             <section class="section pageEntry">
                 <!-- <form id="login_form"> -->
                 <div id="error_flash" class="notification is-danger" data-state="hidden" style="display:none;">
-                    <button class="delete"></button>
-                    Error: The Email or the Password that you enetered is wrong!
                 </div>
                     <div class="field">
                         <p class="control has-icons-left has-icons-right">
@@ -75,20 +73,28 @@ let Login = {
             if (email =='' | pass == '' ) {
                 alert (`The fields cannot be empty`)
             } else {
+                // Start the progress on button click
+                const progressBar = document.getElementById('progress-bar');
+                progressBar.style.transition='width 1.5s';
+                progressBar.style.visibility = 'visible';
+                progressBar.style.width = `60%`;
+            
                 let result = await login_user(email, pass)
-                if (result.success == true) {
-                    store.setItem('_user_username', result.data.username)
+                if (result.status == 'success') {
+                    store.setItem('_user_email',    result.data.email)
                     store.setItem('_user_nickname', result.data.nickname)
-                    store.setItem('_user_flair', result.data.flair)
+                    store.setItem('_user_flair',    result.data.flair)
 
                     
                     // TODO - if user has a back histroy, do window.history.back()
                     window.location = '/'
-                } else if (result.code == 401) {
+                } else if (result.status == 401) {
+                    console.log("401 came")
                     flash.setAttribute('data-state', 'shown')
                     flash.style.display = 'block'
+                    flash.innerText = `${result.message}`
                 } else {
-                    alert (`Login Failed: ${result.errorMessage}`)
+                    console.log (`Login Failed: ${result.errorMessage}`)
                 }
 
                 // alert(`User with email ${email.value} was successfully submitted!`)

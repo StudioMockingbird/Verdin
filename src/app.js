@@ -1,6 +1,5 @@
 "use strict";
 
-import Auth         from './services/Auth.js'
 import Utils        from './services/Utils.js'
 
 import Home         from './views/pages/Home.js'
@@ -14,9 +13,6 @@ import Register     from './views/pages/Register.js'
 
 import Navbar       from './views/components/Navbar.js'
 import Bottombar    from './views/components/Bottombar.js' 
-
-// Check Auth on page load. Do this before everything else
-// window.addEventListener('load', Auth.check());
 
 // List of supported routes. Any url other than these routes will throw a 404 error
 const routes = {
@@ -46,7 +42,7 @@ const router = async () => {
     const content   = null || document.getElementById('page_container');
     const footer    = null || document.getElementById('footer_container');
     
-    // Render the Header and footer of the page
+    // Render the Header, Flash and footer of the page
     header.innerHTML = await Navbar.render();
     await Navbar.after_render();
     footer.innerHTML = await Bottombar.render();
@@ -73,11 +69,11 @@ const router = async () => {
     // If the page has a onlyAllow property, reoute the page appropriately or send user to login page
     if (page.onlyAllow == 'user') {
         // console.log('Only User')
-        page = window.localStorage['_user_username'] ? page : Login
+        page = window.localStorage['_user_email'] ? page : Login
 
     } else if (page.onlyAllow == 'anon') {
         // console.log('Only Anon')
-        page = !window.localStorage['_user_username'] ? page : Home
+        page = !window.localStorage['_user_email'] ? page : Home
     } 
     content.innerHTML = await page.render();
     await page.after_render();
@@ -101,7 +97,6 @@ window.addEventListener('hashchange', router);
 
 // List of all housekeepings services to run on new server request
 const houseKeeping = () => {
-    Auth.check()
     router()
 }
 

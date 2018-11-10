@@ -29,7 +29,7 @@ let Navbar = {
                         </div>
                         <div class="navbar-end">
                             <div class="navbar-item">
-                            ${ window.localStorage['_user_username']
+                            ${ window.localStorage['_user_email']
                             ?
                                 /*html*/`<div class="field is-grouped" id="show_onauth_navitems">
                                     <div class="control">

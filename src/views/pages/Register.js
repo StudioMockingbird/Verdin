@@ -1,8 +1,8 @@
 let create_user = async (email, nick, password) => {
     const payload = {
-        "username": email,
-        "password": password,
-        "nickname" : nick,
+        "email"     : email,
+        "password"  : password,
+        "nickname"  : nick,
       }
     const options = {
         method: 'POST',
@@ -13,9 +13,11 @@ let create_user = async (email, nick, password) => {
         body: JSON.stringify(payload)
     };
     try {
-        const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/signup`, options)
+        // const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/signup`, options)
+        const response = await fetch(`http://localhost:3000/register`, options)
+        console.log(response)
         const json = await response.json();
-        json.responseCode = response.status
+        // json.responseCode = response.status
         console.log(json)
         return json
     } catch (err) {
@@ -96,10 +98,11 @@ let Register = {
                 alert (`The fields cannot be empty`)
             } else {
                 let result = await create_user(email, nick, pass)
-                if (result.success == true) {
+                if (result.status == 'success') {
+                // if (result.success == true) {
                     alert (`User with emailid ${email} was successfully created`)
                 } else {
-                    alert (`Failed: ${result.errorMessage}`)
+                    alert (`Failed: ${result.message}`)
                 }
 
                 // alert(`User with email ${email.value} was successfully submitted!`)

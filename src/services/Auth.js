@@ -37,14 +37,14 @@ let logoutUser = async () => {
 let Auth = {
     check : async () => {
         let store       = window.localStorage
-        // console.log(store['_user_username'])
-        if (store['_user_username']) {
+        // console.log(store['_user_email'])
+        if (store['_user_email']) {
             let authStatus = await checkAuthStatus()
-            store.setItem('_user_username', authStatus.data.username)
+            store.setItem('_user_email', authStatus.data.username)
             store.setItem('_user_nickname', authStatus.data.nickname)
             store.setItem('_user_flair', authStatus.data.flair)
         } else {
-            store.setItem('_user_username', '')
+            store.setItem('_user_email', '')
             store.setItem('_user_nickname', '')
             store.setItem('_user_flair', '')
         }

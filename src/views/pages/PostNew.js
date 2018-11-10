@@ -1,3 +1,22 @@
+let get_available_tags = async () => {
+    const options = {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    try {
+        const response = await fetch(`http://localhost:3000/get_available_tags`, options)
+        const json = await response.json();
+        json.responseCode = response.status
+        // console.log(json)
+        return json
+    } catch (err) {
+        console.log('Error getting documents', err)
+    }
+}
+
 let create_post = async (title, link, content) => {
     const payload = {
         "title"     : title,
@@ -13,7 +32,7 @@ let create_post = async (title, link, content) => {
         body: JSON.stringify(payload)
     };
     try {
-        const response = await fetch(`http://127.0.0.1:8529/_db/playground/auth/createPost`, options)
+        const response = await fetch(`http://localhost:3000/create_post`, options)
         const json = await response.json();
         json.responseCode = response.status
         // console.log(json)
@@ -54,6 +73,17 @@ let PostNew = {
                 </div>
 
                 <div class="field">
+                    <label class="label">Tags</label>
+                    <p class="control has-icons-left">
+                        <input class="input" id="tags_input" type="text" placeholder="Enter at least 3 tags that describe this post">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                    <p class="help is-danger">This email is invalid</p>
+                </div>
+
+                <div class="field">
                     <label class="label">Content</label>
                     <textarea class="textarea" id="content_input" placeholder="Enter a Content of your Post"></textarea>
                     <p class="help is-danger">This email is invalid</p>
@@ -72,6 +102,20 @@ let PostNew = {
         return view
     },
     after_render:  async () => {
+        let tagStore = await get_available_tags()
+        console.log(tagStore.data)
+
+        let tags_field = document.getElementById("tags_input")
+        tags_field.addEventListener ("input", async () => {
+            let currentTextEntered = tags_field.value
+            if (currentTextEntered.length > 2) {
+                let matchedTags = tagStore.data.filter(item => {
+                    return item.includes(currentTextEntered);
+            });
+            console.log("Found match with : " + matchedTags);
+        }
+
+        })
         document.getElementById("newpost_submit_btn").addEventListener ("click", async () => {
             let title       = document.getElementById("title_input").value;
             let link        = document.getElementById("link_input").value;
@@ -81,17 +125,16 @@ let PostNew = {
                 alert (`The title cannot be empty`)
             } else {
                 let result = await create_post(title, link, content)
-                if (result.success == true) {
+                if (result.status == "success") {
 
-                    console.log(result)
-                    
+                    // console.log(result)
+                    // alert("DINGUS")
                     // TODO - if user has a back histroy, do window.history.back()
-                    window.location.hash = `/p/${result.data._key}`
+                    window.location.hash = `/p/${result.data.unqid}`
                 } else if (result.code == 401) {
-                    flash.setAttribute('data-state', 'shown')
-                    flash.style.display = 'block'
+                    console.log(result)
                 } else {
-                    alert (`Login Failed: ${result.errorMessage}`)
+                    console.log(result)
                 }
 
                 // alert(`User with email ${email.value} was successfully submitted!`)
