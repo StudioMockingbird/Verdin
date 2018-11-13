@@ -10,7 +10,7 @@ let getPostsList = async () => {
         }
     };
     try {
-        const response = await fetch(`http://localhost:3000/read_homepage_for_anon`, options)
+        const response = await fetch(`http://localhost:3000/get_homepage_posts_for_anon`, options)
         const json = await response.json();
         // console.log(json)
         return json

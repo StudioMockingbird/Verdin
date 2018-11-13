@@ -15,7 +15,7 @@ let getPost = async (slug) => {
         body: JSON.stringify(payload)
     };
    try {
-       const response = await fetch(`http://localhost:3000/read_post`, options)
+       const response = await fetch(`http://localhost:3000/get_details_and_tags_of_post_for_anon`, options)
        const json = await response.json();
        console.log(json)
        return json

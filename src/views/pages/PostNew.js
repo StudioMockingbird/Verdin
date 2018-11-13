@@ -78,7 +78,7 @@ let PostNew = {
         // Run the after renders for the embedded components
         TagsInput.after_render()
 
-        
+        console.log(selectedTags)
         document.getElementById("newpost_submit_btn").addEventListener ("click", async () => {
             let title       = document.getElementById("title_input").value;
             let link        = document.getElementById("link_input").value;
