@@ -1,10 +1,11 @@
 import TagsInput    from '../components/TagsInput.js' 
 
-let create_post = async (title, link, content) => {
+let create_post = async (title, link, content, tags) => {
     const payload = {
         "title"     : title,
         "link"      : link,
         "content"   : content,
+        "tags"      : tags,
       }
     const options = {
         method: 'POST',
@@ -78,16 +79,17 @@ let PostNew = {
         // Run the after renders for the embedded components
         TagsInput.after_render()
 
-        console.log(selectedTags)
+        
         document.getElementById("newpost_submit_btn").addEventListener ("click", async () => {
             let title       = document.getElementById("title_input").value;
             let link        = document.getElementById("link_input").value;
             let content     = document.getElementById("content_input").value;
+            let tags        = TagsInput.state.selectedTags;
 
             if (title =='') {
                 alert (`The title cannot be empty`)
             } else {
-                let result = await create_post(title, link, content)
+                let result = await create_post(title, link, content, tags)
                 if (result.status == "success") {
 
                     // console.log(result)
@@ -100,7 +102,6 @@ let PostNew = {
                     console.log(result)
                 }
 
-                // alert(`User with email ${email.value} was successfully submitted!`)
             }    
         })
     }

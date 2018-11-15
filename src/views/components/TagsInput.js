@@ -21,9 +21,11 @@ const tagClicked = () => {
 }
 
 let TagsInput = {
+    // Only add shareable state here so that any other component can query the current value of state
     state : {
         selectedTags: []
     },
+
     render: async () => {
         let view =  /*html*/`                
             <div class="field">
@@ -52,7 +54,6 @@ let TagsInput = {
         let tagStore = await get_available_tags()
         console.log(tagStore.data)
         let matchedTags = []
-        let selectedTags = []
 
         let tags_field          = document.getElementById("tags_input")
         let tags_dropdwn        = document.getElementById("tagsinput_dropdown_menu")
@@ -67,7 +68,7 @@ let TagsInput = {
                     return item.includes(currentTextEntered);
                 });
                 // remove elements which are already selected
-                matchedTags = matchedTags.filter(item => !selectedTags.includes(item));
+                matchedTags = matchedTags.filter(item => !TagsInput.state.selectedTags.includes(item));
 
                 // create dom elements for the entrie sin matched tags
                 if (matchedTags.length > 0) {
@@ -93,7 +94,7 @@ let TagsInput = {
         tags_dropdwn_cnt.addEventListener('click', async (e) => {
             if (e.target !== e.currentTarget) {
                 var tag = e.target.getAttribute("data-value");
-                selectedTags.push(tag)
+                TagsInput.state.selectedTags.push(tag)
 
                 // Using the new ES6 range + create frag methods for generating dom nodes from string
                 let tag_node = document.createRange().createContextualFragment(
@@ -107,7 +108,7 @@ let TagsInput = {
                     `
                 )
                 tags_selected_group.appendChild(tag_node)
-                console.log(selectedTags)
+                console.log(TagsInput.state.selectedTags)
 
                 // clear the input and hide the dropdown
                 tags_field.value = ''
@@ -121,9 +122,9 @@ let TagsInput = {
             if (e.target.tagName == 'A') {
                 var tag = e.target.getAttribute("data-value");
                 console.log(tag)
-                selectedTags = selectedTags.filter(item => item !== tag)
+                TagsInput.state.selectedTags = TagsInput.state.selectedTags.filter(item => item !== tag)
                 document.querySelector(`#tag_${tag}`).remove()
-                console.log(selectedTags)
+                console.log(TagsInput.state.selectedTags)
             }
             e.stopPropagation();
         })

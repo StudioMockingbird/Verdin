@@ -1,4 +1,6 @@
 import Utils        from './../../services/Utils.js'
+
+import LikePost    from '../components/LikePost.js' 
 import Error404     from './Error404.js'
 
 let getPost = async (slug) => {
@@ -33,10 +35,23 @@ let PostShow = {
         if (post.status == "success") {
             return /*html*/`
                 <section class="section pageEntry">
-                    <h1> Post Id        : ${post.data.unqid}</h1>
-                    <p> Post Title      : ${post.data.title} </p>
-                    <p> Post Content    : ${post.data.content} </p>
-                    <p> Post Author     : ${post.data.user_nick} </p>
+                    ${ await LikePost.render(post.data.liked_count)}
+                    <p> Post Id             : ${post.data.unqid}</p>
+                    <p> Post Title          : ${post.data.title} </p>
+                    <p> Post Content        : ${post.data.content} </p>
+                    <p> Post Author_id      : ${post.data.user_id} </p>
+                    <p> Post Author_nick    : ${post.data.user_nick} </p>
+                    <p> Post Author         : ${post.data.user_nick} </p>
+                    <p> Post Link           : ${post.data.link} </p>
+                    <p> Post Liked Count    : ${post.data.liked_count} </p>
+                    <p> Post Created at     : ${post.data.created_at} </p>
+                    <p> Post Tags           : </p>
+                    ${ post.data.tags.map(tagdetail => 
+                        /*html*/`
+                            ${tagdetail.name} (${tagdetail.count})
+                        `
+                        )
+                    }
                 </section>
             `
         } else if (post.status == "404" ){
@@ -48,6 +63,7 @@ let PostShow = {
 
     }
     , after_render: async () => {
+        await LikePost.after_render()
     }
 }
 
