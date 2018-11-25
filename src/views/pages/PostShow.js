@@ -126,12 +126,6 @@ let PostShow = {
         // await LikePost.after_render()
         await TagsList.after_render()
 
-        let post_reply_text = document.getElementById("post_reply_txt").value
-        document.getElementById("post_reply_btn").addEventListener("click", async () => {
-            let result = await savePostReply(Utils.parseRequestURL().id, '', 0, post_reply_text)
-            console.log(result)
-
-        })
     }
 }
 

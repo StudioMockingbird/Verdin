@@ -38,11 +38,16 @@ let TagsList = {
                 <div class="control">
                     <div class="tags has-addons">
                     <a class="tag is-link"> ${tagdetail.name} (${tagdetail.count})</a>
-                    <a class="tag "><i class="fas fa-ellipsis-v"></i></a>
+                    ${ window.localStorage['_user_email']
+                    ?
+                    /*html*/`<a class="tag "><i class="fas fa-ellipsis-v"></i></a>`
+                    :
+                    ''
+                    }
                     </div>
                 </div>
             `
-            )}
+            ).join('')}
             </div>
         `
         return view

@@ -52,70 +52,95 @@ let PostContent = {
                     ${post.data.content}
                     </div>
                     <nav class="level is-mobile">
-                    <div class="level-left">
-                        <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                        </a>
-                        <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-retweet"></i></span>
-                        </a>
-                        <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-heart"></i></span>
-                        </a>
-                    </div>
-                    <div class="level-right">
-                        <a class="level-item">
-                            <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                        </a>
-                        <a class="level-item">
-                            <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                        </a>
+                        <div class="level-left">
+                            <a class="level-item" id="post_like_btn">
+                                <span class="icon is-small"><i class="far fa-heart"></i></span>
+                                &nbsp Like &nbsp
+                            </a>
+                            <a class="level-item" id="post_reply_toggle_btn">
+                                <span class="icon is-small"><i class="far fa-comment-alt"></i></span>
+                                &nbsp Reply &nbsp
+                            </a>
 
-                    </div>
+
+                        </div>
+                        <div class="level-right" >
+                            <a class="level-item" id="post_edit_btn">
+                                <span class="icon is-small"><i class="fas fa-edit"></i></span>
+                                &nbsp Edit &nbsp
+                            </a>
+                            <a class="level-item" id="post_delete_btn">
+                                <span class="icon is-small"><i class="far fa-trash-alt"></i></span>
+                                &nbsp Delete &nbsp
+                            </a>
+
+                        </div>
                     </nav>
                 </div>
                 
             </article>
-            <article class="media">
-                <figure class="media-left">
-                    <p class="image is-64x64">
-                    <img src="https://bulma.io/images/placeholders/128x128.png">
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="field">
+            <article class="media" id="post_comment_field">
+            <figure class="media-left">
+                <p class="image is-64x64">
+                <img src="https://bulma.io/images/placeholders/128x128.png">
+                </p>
+            </figure>
+            <div class="media-content">
+                <div class="field">
                     <p class="control">
                         <textarea class="textarea" placeholder="Add a comment..." id="post_reply_txt"></textarea>
                     </p>
-                    </div>
-                    <div class="field">
-                    <p class="control">
-                        <button class="button" id="post_reply_btn">Post comment</button>
-                    </p>
-                    </div>
                 </div>
+                <nav class="level">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <a class="button is-info" id="post_reply_submit">Submit</a>
+                        </div>
+                    </div>
+        
+                </nav>
+            </div>
             </article>
 
         `
         return view
     },
     after_render: async () => {
-        // Get the post id
-        // let postId = Utils.parseRequestURL().id
+        // Handle controls for the post
+        document.getElementById("post_like_btn").addEventListener('click', async (e) => {
+            console.log("Like was clicked")
+        })
+        document.getElementById("post_reply_toggle_btn").addEventListener('click', async (e) => {
+                // ensure user is logged in to use this action
+                // utils.redirect_to_login_if_not_loggedin()
+            
+                var component = document.getElementById('post_comment_field')
+                if (component.style.display === 'none') {
+                    component.style.display = null;
+            
+                    // this bit is mainly for a smoother transition. Broken in chrome
+                    document.getElementById('post_comment_field').scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+                    document.getElementById('post_comment_field').focus();
+                } else {
+                    component.style.display = 'none';
+                }
+        })
+        document.getElementById("post_edit_btn").addEventListener('click', async (e) => {
+            console.log("Like was clicked")
+        })
+        document.getElementById("post_delete_btn").addEventListener('click', async (e) => {
+            console.log("Like was clicked")
+        })
+        
+        let post_reply_text = document.getElementById("post_reply_txt").value
+        document.getElementById("post_reply_submit").addEventListener("click", async () => {
+            let result = await savePostReply(Utils.parseRequestURL().id, '', 0, post_reply_text)
+            console.log(result)
 
-        // // Handle the event when user types in the input and show the matched tags in the dropdown
-        // document.getElementById("like_post_btn").addEventListener ("click", async () => {
+        })
 
-        //     let result = await likePost(postId)
-        //     if (result.status == 'success') {
-        //         console.log('Post liked')
-        //     } else if (result.status == 401) {
-        //         console.log("401 came")
-        //     } else {
-        //         console.log (`Like Failed: ${result.message}`)
-        //     }
-        // })
     }
 }
 
 export default PostContent;
+
