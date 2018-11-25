@@ -1,11 +1,17 @@
 import Utils        from './../../services/Utils.js'
 
-import LikePost    from '../components/LikePost.js' 
+import LikePost     from '../components/LikePost.js' 
+import TagsList     from '../components/TagsList.js' 
+import PostContent  from '../components/PostContent.js' 
+
 import Error404     from './Error404.js'
 
-let getPost = async (slug) => {
+let savePostReply = async (post_id, parent_id, level, content) => {
     const payload = {
-        "slug": slug,
+        "post_id"   : post_id,
+        "parent_id" : parent_id,
+        "level"     : level,
+        "content"   : content,
     }
 
     const options = {
@@ -17,7 +23,31 @@ let getPost = async (slug) => {
         body: JSON.stringify(payload)
     };
    try {
-       const response = await fetch(`http://localhost:3000/get_details_and_tags_of_post_for_anon`, options)
+       const response = await fetch(`http://localhost:3000/create_comment`, options)
+       const json = await response.json();
+       console.log(json)
+       return json
+   } catch (err) {
+       console.log('Error getting documents', err)
+   }
+}
+
+let getPost = async (post_id) => {
+    const payload = {
+        "post_id": post_id,
+    }
+
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+   try {
+       const response = await fetch(`http://localhost:3000/get_post_details_for_anon`, options)
+    //    console.log(response)
        const json = await response.json();
        console.log(json)
        return json
@@ -35,7 +65,41 @@ let PostShow = {
         if (post.status == "success") {
             return /*html*/`
                 <section class="section pageEntry">
-                    ${ await LikePost.render(post.data.liked_count)}
+                ${ await PostContent.render(post)}
+      
+                    <article class="media">
+                        <div class="media-content">
+                        ${await TagsList.render(post.data.tags)}
+                        </div>
+                    </article>
+
+                    <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-64x64">
+                            <img src="https://bulma.io/images/placeholders/128x128.png">
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="content">
+   
+                                <p>
+                                    <figure class="image image is-48x48">
+                                        <img src="https://via.placeholder.com/48x48">
+                                        
+                                    </figure>
+                                    <strong>Barbara Middleton</strong>
+                                    <br>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
+                                    <br>
+                                    <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
+                                </p>
+                            </div>
+
+                        </div>
+                    </article>
+
+
+                    <!-- ${ await LikePost.render(post.data.liked_count)} -->
                     <p> Post Id             : ${post.data.unqid}</p>
                     <p> Post Title          : ${post.data.title} </p>
                     <p> Post Content        : ${post.data.content} </p>
@@ -46,12 +110,7 @@ let PostShow = {
                     <p> Post Liked Count    : ${post.data.liked_count} </p>
                     <p> Post Created at     : ${post.data.created_at} </p>
                     <p> Post Tags           : </p>
-                    ${ post.data.tags.map(tagdetail => 
-                        /*html*/`
-                            ${tagdetail.name} (${tagdetail.count})
-                        `
-                        )
-                    }
+
                 </section>
             `
         } else if (post.status == "404" ){
@@ -63,7 +122,16 @@ let PostShow = {
 
     }
     , after_render: async () => {
-        await LikePost.after_render()
+        await PostContent.after_render()
+        // await LikePost.after_render()
+        await TagsList.after_render()
+
+        let post_reply_text = document.getElementById("post_reply_txt").value
+        document.getElementById("post_reply_btn").addEventListener("click", async () => {
+            let result = await savePostReply(Utils.parseRequestURL().id, '', 0, post_reply_text)
+            console.log(result)
+
+        })
     }
 }
 

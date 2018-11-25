@@ -17,9 +17,10 @@ let create_post = async (title, link, content, tags) => {
     };
     try {
         const response = await fetch(`http://localhost:3000/create_post`, options)
+        console.log(response)
         const json = await response.json();
         json.responseCode = response.status
-        // console.log(json)
+        console.log(json)
         return json
     } catch (err) {
         console.log('Error getting documents', err)

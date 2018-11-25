@@ -1,8 +1,8 @@
 import Utils        from './../../services/Utils.js'
 
-let likePost = async (slug) => {
+let likePost = async (post_id) => {
     const payload = {
-        "slug": slug,
+        "post_id": post_id,
     }
 
     const options = {
@@ -34,7 +34,7 @@ let LikePost = {
             <a class="button is-danger is-outlined" id="like_post_btn">
                 <span class="icon is-small">
                     <i class="far fa-heart"></i>
-                    ${count ? count : 'no count'}
+                    ${count ? count : 0}
                 </span>
             </a>
         `
