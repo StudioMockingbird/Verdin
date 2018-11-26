@@ -1,27 +1,31 @@
 import Utils        from '../../services/Utils.js'
 
-// let likePost = async (post_id) => {
-//     const payload = {
-//         "post_id": post_id,
-//     }
 
-//     const options = {
-//         method: 'POST',
-//         credentials: 'include',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(payload)
-//     };
-//    try {
-//        const response = await fetch(`http://localhost:3000/like_post`, options)
-//        const json = await response.json();
-//        console.log(json)
-//        return json
-//    } catch (err) {
-//        console.log('Error getting documents', err)
-//    }
-// }
+let savePostReply = async (post_id, parent_id, level, content) => {
+    const payload = {
+        "post_id"   : post_id,
+        "parent_id" : parent_id,
+        "level"     : level,
+        "content"   : content,
+    }
+
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+   try {
+       const response = await fetch(`http://localhost:3000/create_comment`, options)
+       const json = await response.json();
+       console.log(json)
+       return json
+   } catch (err) {
+       console.log('Error getting documents', err)
+   }
+}
 
 let PostContent = {
     // Only add shareable state here so that any other component can query the current value of state
