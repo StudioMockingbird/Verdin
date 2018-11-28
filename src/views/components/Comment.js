@@ -32,55 +32,47 @@ let CommentsTree = {
     render: async (postId) => {
         let comments = await getComments(postId)
         let comments_tree = await Utils.list_to_tree(comments.data)
-        console.log(comments_tree)
-
-        let comment_component =  (cdata) => 
-        /*html*/`   
-            <article class="media">
-                <figure class="media-left">
-                    <p class="image is-64x64">
-                    <img src="https://bulma.io/images/placeholders/96x96.png">
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>${cdata.user_nick} </strong>
-                            <br>
-                            ${cdata.content}
-                            <br>
-                            <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                        </p>
-                    </div>
-                    ${ cdata.children.map(comment => {
-                            return comment_component(comment)
-                        }).join('')
-                    }
-                </div>
-            </article>
-        `
-
+        console.log(Utils.list_to_tree(comments_tree))
         let view = 
             /*html*/`            
                 <section class="section" id="commentstree_container">    
-                ${ comments_tree.length > 0 
-                ?
-                comments_tree.map(comment => 
-                    comment_component(comment)
-    
-                    ).join('')
-                :
+            ${ comments.data.length > 0 
+            ?
+            comments.data.map(comment => 
                 /*html*/`
+
                     <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-48x48">
+                            <img src="https://bulma.io/images/placeholders/96x96.png">
+                            </p>
+                        </figure>
                         <div class="media-content">
                             <div class="content">
-                                <p> This post has no comments </p>
+                            <p>
+                                <strong>${comment.user_nick} </strong>
+                                <br>
+                                ${comment.content}
+                                <br>
+                                <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                            </p>
                             </div>
                         </div>
-                    </article>    
-                `   
-                }
-                </section>        
+                    </article>
+                `
+                ).join('')
+            :
+            /*html*/`
+            <article class="media">
+                    <div class="media-content">
+                        <div class="content">
+                            <p> This post has no comments </p>
+                        </div>
+                    </div>
+                </article>    
+            `   
+            }
+            </section>        
             `
         return view
     },

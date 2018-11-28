@@ -124,7 +124,7 @@ let PostContent = {
             
                     // this bit is mainly for a smoother transition. Broken in chrome
                     document.getElementById('post_comment_field').scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
-                    document.getElementById('post_comment_field').focus();
+                    document.getElementById('post_reply_txt').focus();
                 } else {
                     component.style.display = 'none';
                 }

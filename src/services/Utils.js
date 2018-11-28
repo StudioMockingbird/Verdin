@@ -23,6 +23,33 @@ const Utils = {
     // --------------------------------
     , sleep: (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    list_to_tree: async (docs) => {
+    
+        var tree = [],
+            childrenOf = {};
+        var item, id, parentId;
+    
+        docs.forEach((item) => {
+
+            id = item.unqid;
+            parentId = item.parent_id || 0;
+            // every item may have children
+            childrenOf[id] = childrenOf[id] || [];
+            // init its children
+            item.children = childrenOf[id];
+            if (parentId != 0) {
+                // init its parent's children object
+                childrenOf[parentId] = childrenOf[parentId] || [];
+                // push it into its parent's children object
+                childrenOf[parentId].push(item);
+            } else {
+                tree.push(item);
+            }
+        })
+    
+        return tree;
     }
 }
 
