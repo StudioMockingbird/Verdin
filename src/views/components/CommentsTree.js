@@ -24,6 +24,31 @@ let getComments = async (post_id) => {
    }
 }
 
+let saveComment = async (post_id, parent_id, content) => {
+    const payload = {
+        "post_id"   : post_id,
+        "parent_id" : parent_id,
+        "content"   : content,
+    }
+
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+   try {
+       const response = await fetch(`http://localhost:3000/create_comment`, options)
+       const json = await response.json();
+       console.log(json)
+       return json
+   } catch (err) {
+       console.log('Error getting documents', err)
+   }
+}
+
 let CommentsTree = {
     // Only add shareable state here so that any other component can query the current value of state
     state : {
@@ -56,7 +81,8 @@ let CommentsTree = {
                             </small>
                         </p>
                     </div>
-                    <article class="media" data-input-controls-for-comment="${cdata.unqid}" style="display:none">
+                    <!-- This bit adds the textbox and submit buttons to add a new comment to the tree. its hidden by default. -->
+                    <article class="media is-hidden" data-input-controls-for-comment="${cdata.unqid}">
                         <figure class="media-left">
                             <p class="image is-64x64">
                             <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -65,13 +91,13 @@ let CommentsTree = {
                         <div class="media-content">
                             <div class="field">
                                 <p class="control">
-                                    <textarea class="textarea" placeholder="Add a comment..." id="reply_txt"></textarea>
+                                    <textarea class="textarea" placeholder="Add a comment..." data-text-input-for-comment="${cdata.unqid}"></textarea>
                                 </p>
                             </div>
                             <nav class="level">
                                 <div class="level-left">
                                     <div class="level-item">
-                                        <a class="button is-info" id="reply_submit">Submit</a>
+                                        <a class="button is-info" data-submit-button-for-comment="${cdata.unqid}">Submit</a>
                                     </div>
                                 </div>
                     
@@ -121,11 +147,34 @@ let CommentsTree = {
                     console.log("Clicked on Reply for", e.target.getAttribute('data-reply-link-for-comment'))
                     let commentid = e.target.getAttribute('data-reply-link-for-comment')
                     let container = document.querySelector(`[data-input-controls-for-comment=${CSS.escape(commentid)}]`);
-                    if (container.style.display == "") {
-                        container.style.display = "none";
+                    container.classList.toggle('is-hidden')
+                    // this bit is mainly for a smoother transition. Broken in chrome
+                    document.querySelector(`[data-text-input-for-comment=${CSS.escape(commentid)}]`).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+                    document.querySelector(`[data-text-input-for-comment=${CSS.escape(commentid)}]`).focus();
+
+                } else if (e.target.hasAttribute('data-submit-button-for-comment')) {
+                    let commentid = e.target.getAttribute('data-submit-button-for-comment')
+                    console.log("Clicked on Submit for", e.target.getAttribute('data-submit-button-for-comment'))
+
+                    let content = document.querySelector(`[data-text-input-for-comment=${CSS.escape(commentid)}]`).value;
+                    if (content =='') {
+                        alert (`The content cannot be empty`)
                     } else {
-                        container.style.display = "";
-                    }
+                        console.log("Submitting comment", content)
+                        let result = await saveComment(Utils.parseRequestURL().id, commentid, content)
+                        if (result.status == "success") {
+        
+                            // console.log(result)
+                            // alert("DINGUS")
+                            // TODO - if user has a back histroy, do window.history.back()
+                            window.location.hash = `/p/${result.data.post_id}`
+                        // } else if (result.code == 401) {
+                        //     console.log(result)
+                        } else {
+                            console.log(result)
+                        }
+        
+                    }    
                 }
             }
             e.stopPropagation();

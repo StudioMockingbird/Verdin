@@ -1,11 +1,9 @@
 import Utils        from '../../services/Utils.js'
 
-
-let savePostReply = async (post_id, parent_id, level, content) => {
+let saveComment = async (post_id, parent_id, content) => {
     const payload = {
         "post_id"   : post_id,
         "parent_id" : parent_id,
-        "level"     : level,
         "content"   : content,
     }
 
@@ -83,7 +81,7 @@ let PostContent = {
                 </div>
                 
             </article>
-            <article class="media" id="post_comment_field">
+            <article class="media is-hidden" id="post_comment_field">
                 <figure class="media-left">
                     <p class="image is-64x64">
                     <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -117,17 +115,12 @@ let PostContent = {
         document.getElementById("post_reply_toggle_btn").addEventListener('click', async (e) => {
                 // ensure user is logged in to use this action
                 // utils.redirect_to_login_if_not_loggedin()
-            
-                var component = document.getElementById('post_comment_field')
-                if (component.style.display === 'none') {
-                    component.style.display = null;
-            
-                    // this bit is mainly for a smoother transition. Broken in chrome
-                    document.getElementById('post_comment_field').scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
-                    document.getElementById('post_reply_txt').focus();
-                } else {
-                    component.style.display = 'none';
-                }
+
+            let component = document.getElementById('post_comment_field')
+            component.classList.toggle('is-hidden')
+            // this bit is mainly for a smoother transition. Broken in chrome
+            document.getElementById('post_reply_txt').scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+            document.getElementById('post_reply_txt').focus();
         })
         document.getElementById("post_edit_btn").addEventListener('click', async (e) => {
             console.log("Like was clicked")
@@ -136,9 +129,9 @@ let PostContent = {
             console.log("Like was clicked")
         })
         
-        let post_reply_text = document.getElementById("post_reply_txt").value
-        document.getElementById("post_reply_submit").addEventListener("click", async () => {
-            let result = await savePostReply(Utils.parseRequestURL().id, '', 0, post_reply_text)
+        document.getElementById("post_reply_submit").addEventListener("click", async (e) => {
+            let post_reply_text = document.getElementById("post_reply_txt").value
+            let result = await saveComment(Utils.parseRequestURL().id, '', post_reply_text)
             console.log(result)
 
         })
