@@ -49,9 +49,35 @@ let CommentsTree = {
                             <br>
                             ${cdata.content}
                             <br>
-                            <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
+                            <small>
+                                <a data-like-link-for-comment="${cdata.unqid}">Like</a> · 
+                                <a data-reply-link-for-comment="${cdata.unqid}">Reply</a> · 
+                                 · 2 hrs
+                            </small>
                         </p>
                     </div>
+                    <article class="media" data-input-controls-for-comment="${cdata.unqid}" style="display:none">
+                        <figure class="media-left">
+                            <p class="image is-64x64">
+                            <img src="https://bulma.io/images/placeholders/128x128.png">
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="field">
+                                <p class="control">
+                                    <textarea class="textarea" placeholder="Add a comment..." id="reply_txt"></textarea>
+                                </p>
+                            </div>
+                            <nav class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <a class="button is-info" id="reply_submit">Submit</a>
+                                    </div>
+                                </div>
+                    
+                            </nav>
+                        </div>
+                    </article>
                     ${ cdata.children.map(comment => {
                             return comment_component(comment)
                         }).join('')
@@ -89,8 +115,18 @@ let CommentsTree = {
         // Handle the event when user types in the input and show the matched tags in the dropdown
         document.getElementById('commentstree_container').addEventListener('click', async (e) => {
             if (e.target.tagName == 'A') {
-                console.log(e.target.innerText)
-
+                if (e.target.hasAttribute('data-like-link-for-comment')) {
+                    console.log("Clicked on Like for", e.target.getAttribute('data-like-link-for-comment'))
+                } else if (e.target.hasAttribute('data-reply-link-for-comment')) {
+                    console.log("Clicked on Reply for", e.target.getAttribute('data-reply-link-for-comment'))
+                    let commentid = e.target.getAttribute('data-reply-link-for-comment')
+                    let container = document.querySelector(`[data-input-controls-for-comment=${CSS.escape(commentid)}]`);
+                    if (container.style.display == "") {
+                        container.style.display = "none";
+                    } else {
+                        container.style.display = "";
+                    }
+                }
             }
             e.stopPropagation();
         })

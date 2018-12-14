@@ -84,26 +84,26 @@ let PostContent = {
                 
             </article>
             <article class="media" id="post_comment_field">
-            <figure class="media-left">
-                <p class="image is-64x64">
-                <img src="https://bulma.io/images/placeholders/128x128.png">
-                </p>
-            </figure>
-            <div class="media-content">
-                <div class="field">
-                    <p class="control">
-                        <textarea class="textarea" placeholder="Add a comment..." id="post_reply_txt"></textarea>
+                <figure class="media-left">
+                    <p class="image is-64x64">
+                    <img src="https://bulma.io/images/placeholders/128x128.png">
                     </p>
-                </div>
-                <nav class="level">
-                    <div class="level-left">
-                        <div class="level-item">
-                            <a class="button is-info" id="post_reply_submit">Submit</a>
-                        </div>
+                </figure>
+                <div class="media-content">
+                    <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..." id="post_reply_txt"></textarea>
+                        </p>
                     </div>
-        
-                </nav>
-            </div>
+                    <nav class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <a class="button is-info" id="post_reply_submit">Submit</a>
+                            </div>
+                        </div>
+            
+                    </nav>
+                </div>
             </article>
 
         `
