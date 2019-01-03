@@ -28,24 +28,7 @@ let getPostsByTags = async (plusTags, minusTags) => {
     }
 }
 
-let getPostsList = async () => {
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-    try {
-        const response = await fetch(`http://localhost:3000/get_homepage_posts_for_anon`, options)
-        const json = await response.json();
-        // console.log(json)
-        return json
-    } catch (err) {
-        console.log('Error getting documents', err)
-    }
-}
-
-let Home = {
+let Explore = {
     onlyAllow: 'all',
     render: async () => {
 
@@ -77,10 +60,9 @@ let Home = {
         }
         console.log("chosen : " + chosenTags)
         console.log("rejected : " + rejectedTags)
-        let tresult = await getPostsByTags(chosenTags, rejectedTags)
-        console.log(tresult)
 
-        let result = await getPostsList()
+     
+        let result = await getPostsByTags(chosenTags, rejectedTags)
         if (result.status == "success") {
             let posts = result.data
             // Since I cannot use async-await with maps, It is beter to preprender the cards and then add them to the template
@@ -105,4 +87,4 @@ let Home = {
 
 }
 
-export default Home;
+export default Explore;
