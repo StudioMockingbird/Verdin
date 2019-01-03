@@ -25,6 +25,29 @@ let saveComment = async (post_id, parent_id, content) => {
    }
 }
 
+let likePost = async (post_id) => {
+    const payload = {
+        "post_id"   : post_id
+    }
+
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+   try {
+       const response = await fetch(`http://localhost:3000/like_post`, options)
+       const json = await response.json();
+       console.log(json)
+       return json
+   } catch (err) {
+       console.log('Error getting documents', err)
+   }
+}
+
 let PostContent = {
     // Only add shareable state here so that any other component can query the current value of state
     state : {
@@ -111,6 +134,8 @@ let PostContent = {
         // Handle controls for the post
         document.getElementById("post_like_btn").addEventListener('click', async (e) => {
             console.log("Like was clicked")
+            let result = await likePost(Utils.parseRequestURL().id)
+            console.log(result)
         })
         document.getElementById("post_reply_toggle_btn").addEventListener('click', async (e) => {
                 // ensure user is logged in to use this action
@@ -123,10 +148,10 @@ let PostContent = {
             document.getElementById('post_reply_txt').focus();
         })
         document.getElementById("post_edit_btn").addEventListener('click', async (e) => {
-            console.log("Like was clicked")
+            console.log("Edit was clicked")
         })
         document.getElementById("post_delete_btn").addEventListener('click', async (e) => {
-            console.log("Like was clicked")
+            console.log("Delete was clicked")
         })
         
         document.getElementById("post_reply_submit").addEventListener("click", async (e) => {

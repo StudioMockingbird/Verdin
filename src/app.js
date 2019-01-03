@@ -3,10 +3,12 @@
 import Utils        from './services/Utils.js'
 
 import Home         from './views/pages/Home.js'
+import Explore         from './views/pages/Explore.js'
 import About        from './views/pages/About.js'
 import Error404     from './views/pages/Error404.js'
 import PostNew      from './views/pages/PostNew.js'
 import PostShow     from './views/pages/PostShow.js'
+import Profile      from './views/pages/Profile.js'
 import Login        from './views/pages/Login.js'
 import Logout       from './views/pages/Logout.js'
 import Register     from './views/pages/Register.js'
@@ -18,11 +20,20 @@ import Bottombar    from './views/components/Bottombar.js'
 const routes = {
     '/'             : Home
     , '/about'      : About
-    , '/p/:id'      : PostShow
+    , '/p/:param'      : PostShow
     , '/p/new'      : PostNew
     , '/login'      : Login
     , '/register'   : Register
     , '/logout'     : Logout
+    , '/t/:param'      : Explore
+    // , '/u/me/'     : Logout
+    // , '/u/me/account'     : Logout
+    // , '/u/me/posts'     : Logout
+    // , '/u/me/comments'     : Logout
+    // , '/u/:param/'     : Logout
+    // , '/u/:param/posts'     : Logout
+    // , '/u/:param/comments'     : Logout
+    , '/u/me/profile'     : Profile
 };
 
 const progressbar_setWidth = (p) => {
@@ -53,13 +64,13 @@ const router = async () => {
     
     // Check if the route already exists, if it does, then render that page
     // If not then check if it is a dynamic route. If yes, then parse the url, else route to 404
-    // Parse the URL and if it has an id part, change it with the string ":id"
+    // Parse the URL and if it has an id part, change it with the string ":param"
     let parsedURL = 
         routes[location.hash.slice(1).toLowerCase() || '/']
         ?
         (location.hash.slice(1).toLowerCase() || '/')
         :
-        ((request.resource ? '/' + request.resource : '/') + (request.id ? '/:id' : '') + (request.verb ? '/' + request.verb : ''))
+        ((request.resource ? '/' + request.resource : '/') + (request.id ? '/:param' : '') + (request.verb ? '/' + request.verb : ''))
     
     // Get the page from our hash of supported routes.
     // If the parsed URL is not in our list of supported routes, select the 404 page instead

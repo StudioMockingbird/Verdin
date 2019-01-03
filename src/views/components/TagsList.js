@@ -33,11 +33,11 @@ let TagsList = {
         console.log(tagsObj)
         let view =  /*html*/`                
             <div class="field is-grouped is-grouped-multiline">
-            ${ tagsObj.map(tagdetail => 
+            ${ Object.entries(tagsObj).map(([tagname, tagcount]) =>
                 /*html*/`
                 <div class="control">
                     <div class="tags has-addons">
-                    <a class="tag is-link"> ${tagdetail.name} (${tagdetail.count})</a>
+                    <a class="tag is-link"> ${tagname} (${tagcount})</a>
                     ${ window.localStorage['_user_email']
                     ?
                     /*html*/`<a class="tag "><i class="fas fa-ellipsis-v"></i></a>`

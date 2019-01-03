@@ -1,9 +1,11 @@
+import Card    from '../components/Card.js' 
+
 // --------------------------------
 //  Define Data Sources
 // --------------------------------
 
 let getPostsList = async () => {
-     const options = {
+    const options = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -21,22 +23,22 @@ let getPostsList = async () => {
 
 let Home = {
     onlyAllow: 'all',
-    render : async () => {
+    render: async () => {
         let result = await getPostsList()
         if (result.status == "success") {
             let posts = result.data
+            // Since I cannot use async-await with maps, It is beter to preprender the cards and then add them to the template
+            let cards = await Promise.all(posts.map( (post) => Card.render(post)))
             let view =  /*html*/`
             <section class="section pageEntry">
                 <h1> Home </h1>
-                <ul>
-                    ${ posts.map(post => 
-                        /*html*/`<li><a href="#/p/${post.unqid}">${post.title}</a></li>`
-                        ).join('\n ')
-                    }
-                </ul>
+                
+                <div class="columns is-multiline" id="cards_container">
+                ${cards.join('\n ')}
+                </div>
             </section>
-        `
-        return view
+            `
+            return view
         } else {
             console.log(result)
         }

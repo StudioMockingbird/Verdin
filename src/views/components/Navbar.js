@@ -28,36 +28,54 @@ let Navbar = {
                             </a>
                         </div>
                         <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="control has-icons-right">
+                                <input class="input is-fullwidth" type="text" placeholder="Search for posts...">
+
+                                <span class="icon is-small is-right">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
                             <div class="navbar-item">
                             ${ window.localStorage['_user_email']
-                            ?
+                ?
                                 /*html*/`<div class="field is-grouped" id="show_onauth_navitems">
                                     <div class="control">
                                         <a class="button is-primary" href="/#/p/new">
-                                            <strong>New Post</strong>
+                                        <span class="icon"> <i class="fas fa-plus-square"></i> </span>
+
+                                        <span>New Post</span>
                                         </a>
+                                        
                                     </div>
                                     <div class="control">
                                         <a class="button is-light" href="/#/logout">
-                                            Logout
+                                        <span class="icon"> <i class="fas fa-sign-out-alt"></i> </span>
+
+                                        <span>Logout</span>
                                         </a>
                                     </div>
                                 </div>`
-                            :
+                :
 
                                 /*html*/`<div class="field is-grouped" id="hide_onauth_navitems">
                                     <div class="control">
                                         <a class="button is-primary" href="/#/register">
-                                            <strong>Sign up</strong>
+                                            <span class="icon"> <i class="fas fa-user-plus"></i> </span>
+
+                                            <span>Sign up</span>
                                         </a>
                                     </div>
                                     <div class="control">
                                         <a class="button is-light" href="/#/login">
-                                            Log in
+                                        <span class="icon"> <i class="fas fa-sign-in-alt"></i> </span>
+
+                                        <span>Log in</span>
                                         </a>
                                     </div>
                                 </div>`
-                            }
+            }
     
                             </div>
                         </div>

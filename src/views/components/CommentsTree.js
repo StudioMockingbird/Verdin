@@ -71,13 +71,15 @@ let CommentsTree = {
                     <div class="content">
                         <p>
                             <strong>${cdata.user_nick} </strong>
+                            <i class="far fa-clock"></i>
+                            <small>31m ago</small>
                             <br>
                             ${cdata.content}
                             <br>
                             <small>
                                 <a data-like-link-for-comment="${cdata.unqid}">Like</a> · 
                                 <a data-reply-link-for-comment="${cdata.unqid}">Reply</a> · 
-                                 · 2 hrs
+                                2 hrs ago
                             </small>
                         </p>
                     </div>
