@@ -1,7 +1,7 @@
 let login_user = async (email, password) => {
     const payload = {
-        "email": email,
-        "password": password,
+        "user_email":   email,
+        "password":     password,
       }
     const options = {
         method: 'POST',
@@ -41,10 +41,14 @@ let Login = {
                         <p class="help is-danger">This email is invalid</p>
                     </div>
                     <div class="field">
-                        <p class="control has-icons-left">
+                        <p class="control has-icons-left has-icons-right">
                             <input class="input" id="pass_input" type="password" placeholder="Enter the Password" required>
                             <span class="icon is-small is-left">
-                                <i class="fas fa-lock"></i>
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <a href="#" class="button"> <i class="fas fa-eye-slash"></i> </a>
+                                
                             </span>
                         </p>
                         <p class="help is-danger">This email is invalid</p>
@@ -81,9 +85,11 @@ let Login = {
             
                 let result = await login_user(email, pass)
                 if (result.status == 'success') {
-                    store.setItem('_user_email',    result.data.email)
-                    store.setItem('_user_nickname', result.data.nickname)
-                    store.setItem('_user_flair',    result.data.flair)
+                    store.setItem('_user_email',    result.data.user_email)
+                    store.setItem('_user_id',       result.data.user_id)
+                    store.setItem('_user_nickname', result.data.user_nick)
+                    store.setItem('_user_flair',    result.data.user_flair)
+                    store.setItem('_user_thumb',    result.data.user_thumb)
 
                     
                     // TODO - if user has a back histroy, do window.history.back()

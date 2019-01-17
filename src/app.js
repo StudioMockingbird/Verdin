@@ -3,7 +3,7 @@
 import Utils        from './services/Utils.js'
 
 import Home         from './views/pages/Home.js'
-import Explore         from './views/pages/Explore.js'
+import Explore      from './views/pages/Explore.js'
 import About        from './views/pages/About.js'
 import Error404     from './views/pages/Error404.js'
 import PostNew      from './views/pages/PostNew.js'
@@ -12,22 +12,23 @@ import Profile      from './views/pages/Profile.js'
 import Login        from './views/pages/Login.js'
 import Logout       from './views/pages/Logout.js'
 import Register     from './views/pages/Register.js'
+import Account      from './views/pages/Account.js'
 
 import Navbar       from './views/components/Navbar.js'
 import Bottombar    from './views/components/Bottombar.js' 
 
 // List of supported routes. Any url other than these routes will throw a 404 error
 const routes = {
-    '/'             : Home
-    , '/about'      : About
-    , '/p/:param'      : PostShow
-    , '/p/new'      : PostNew
-    , '/login'      : Login
-    , '/register'   : Register
-    , '/logout'     : Logout
-    , '/t/:param'      : Explore
+    '/'                 : Home
+    , '/about'          : About
+    , '/p/:param'       : PostShow
+    , '/p/new'          : PostNew
+    , '/login'          : Login
+    , '/register'       : Register
+    , '/logout'         : Logout
+    , '/t/:param'       : Explore
     // , '/u/me/'     : Logout
-    // , '/u/me/account'     : Logout
+    , '/me/account'   : Account
     // , '/u/me/posts'     : Logout
     // , '/u/me/comments'     : Logout
     // , '/u/:param/'     : Logout

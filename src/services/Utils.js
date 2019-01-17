@@ -19,6 +19,13 @@ const Utils = {
     }
 
     // --------------------------------
+    //  Time ago
+    // --------------------------------
+    , timeAgo: (time) => {
+        console.log(Date.now() - Date.parse(time))
+    }
+
+    // --------------------------------
     //  Simple sleep implementation
     // --------------------------------
     , sleep: (ms) => {

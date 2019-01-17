@@ -1,4 +1,5 @@
 import Utils        from '../../services/Utils.js'
+import PostEditControls from '../components/PostEditControls.js'
 
 let saveComment = async (post_id, parent_id, content) => {
     const payload = {
@@ -89,16 +90,15 @@ let PostContent = {
 
 
                         </div>
-                        <div class="level-right" >
-                            <a class="level-item" id="post_edit_btn">
+                        <div class="level-right is-hidden" data-visible-to="${post.data.user_id}">
+                            <a class="level-item" id="post_edit_btn" >
                                 <span class="icon is-small"><i class="fas fa-edit"></i></span>
-                                &nbsp Edit &nbsp
+                                &nbsp EDIT &nbsp
                             </a>
                             <a class="level-item" id="post_delete_btn">
                                 <span class="icon is-small"><i class="far fa-trash-alt"></i></span>
                                 &nbsp Delete &nbsp
                             </a>
-
                         </div>
                     </nav>
                 </div>
@@ -127,10 +127,18 @@ let PostContent = {
                 </div>
             </article>
 
+            ${await PostEditControls.render(post.data.title, post.data.link, post.data.content)}
+
         `
         return view
     },
     after_render: async () => {
+        // Default visibility of elements for the current user
+        let current_user_id = window.localStorage['_user_id']
+        document.querySelectorAll('[data-visible-to="' + CSS.escape(current_user_id) + '"]').forEach(node => {
+            node.classList.remove('is-hidden')
+        })
+
         // Handle controls for the post
         document.getElementById("post_like_btn").addEventListener('click', async (e) => {
             console.log("Like was clicked")
@@ -147,17 +155,26 @@ let PostContent = {
             document.getElementById('post_reply_txt').scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
             document.getElementById('post_reply_txt').focus();
         })
+        
         document.getElementById("post_edit_btn").addEventListener('click', async (e) => {
             console.log("Edit was clicked")
         })
+
         document.getElementById("post_delete_btn").addEventListener('click', async (e) => {
             console.log("Delete was clicked")
         })
-        
+
         document.getElementById("post_reply_submit").addEventListener("click", async (e) => {
             let post_reply_text = document.getElementById("post_reply_txt").value
             let result = await saveComment(Utils.parseRequestURL().id, '', post_reply_text)
-            console.log(result)
+            if (result.status == 'success') {
+                console.log(`Update Succeeded: ${result.errorMessage}`)
+            } else {
+                console.log(`Update Failed: ${result.errorMessage}`)
+                flash.setAttribute('data-state', 'shown')
+                flash.style.display = 'block'
+                flash.innerText = `${result.message}`
+            }
 
         })
 

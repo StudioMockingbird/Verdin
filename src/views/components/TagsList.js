@@ -37,7 +37,7 @@ let TagsList = {
                 /*html*/`
                 <div class="control">
                     <div class="tags has-addons">
-                    <a class="tag is-link"> ${tagname} (${tagcount})</a>
+                    <a class="tag is-link" href="/#/t/+${tagname}"> ${tagname} (${tagcount})</a>
                     ${ window.localStorage['_user_email']
                     ?
                     /*html*/`<a class="tag "><i class="fas fa-ellipsis-v"></i></a>`

@@ -173,7 +173,10 @@ let CommentsTree = {
                         // } else if (result.code == 401) {
                         //     console.log(result)
                         } else {
-                            console.log(result)
+                            console.log(`Update Failed: ${result.errorMessage}`)
+                            flash.setAttribute('data-state', 'shown')
+                            flash.style.display = 'block'
+                            flash.innerText = `${result.message}`
                         }
         
                     }    

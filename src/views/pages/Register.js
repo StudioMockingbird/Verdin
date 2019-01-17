@@ -1,8 +1,8 @@
 let create_user = async (email, nick, password) => {
     const payload = {
-        "email"     : email,
-        "password"  : password,
-        "nickname"  : nick,
+        "user_email"    : email,
+        "password"      : password,
+        "user_nick"     : nick,
       }
     const options = {
         method: 'POST',

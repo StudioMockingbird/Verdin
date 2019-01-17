@@ -97,10 +97,11 @@ let PostNew = {
                     // alert("DINGUS")
                     // TODO - if user has a back histroy, do window.history.back()
                     window.location.hash = `/p/${result.data.unqid}`
-                } else if (result.code == 401) {
-                    console.log(result)
                 } else {
-                    console.log(result)
+                    console.log(`Update Failed: ${result.errorMessage}`)
+                    flash.setAttribute('data-state', 'shown')
+                    flash.style.display = 'block'
+                    flash.innerText = `${result.message}`
                 }
 
             }    
