@@ -26,8 +26,6 @@ let Login = {
         return /*html*/ `
             <section class="section pageEntry">
                 <!-- <form id="login_form"> -->
-                <div id="error_flash" class="notification is-danger" data-state="hidden" style="display:none;">
-                </div>
                     <div class="field">
                         <p class="control has-icons-left has-icons-right">
                             <input class="input" id="email_input" type="email" placeholder="Enter your Email" required>
@@ -95,9 +93,7 @@ let Login = {
                     // TODO - if user has a back histroy, do window.history.back()
                     window.location = '/'
                 } else if (result.status == 401) {
-                    console.log("401 came")
-                    flash.setAttribute('data-state', 'shown')
-                    flash.style.display = 'block'
+                    flash.classList.toggle('is-hidden')
                     flash.innerText = `${result.message}`
                 } else {
                     console.log (`Login Failed: ${result.errorMessage}`)

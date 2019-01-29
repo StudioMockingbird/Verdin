@@ -32,6 +32,7 @@ let PostNew = {
     render : async () => {
         let view =  /*html*/`
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <div class="field">
                     <label class="label">Title</label>
                     <p class="control has-icons-left has-icons-right">
@@ -77,6 +78,8 @@ let PostNew = {
         return view
     },
     after_render:  async () => {
+        let flash       = document.getElementById("error_flash");
+        
         // Run the after renders for the embedded components
         TagsInput.after_render()
 

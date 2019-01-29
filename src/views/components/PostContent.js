@@ -26,6 +26,32 @@ let saveComment = async (post_id, parent_id, content) => {
    }
 }
 
+let changePost = async (post_id, title, link, content) => {
+    const payload = {
+        "post_id"       : post_id,
+        "new_title"     : title,
+        "new_link"      : link,
+        "new_content"   : content,
+    }
+
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+   try {
+       const response = await fetch(`http://localhost:3000/update_post`, options)
+       const json = await response.json();
+       console.log(json)
+       return json
+   } catch (err) {
+       console.log('Error getting documents', err)
+   }
+}
+
 let likePost = async (post_id) => {
     const payload = {
         "post_id"   : post_id
@@ -55,10 +81,9 @@ let PostContent = {
     },
 
     render: async (post) => {
-        console.log(post)
         let view =  /*html*/`                
             <h3 class="title is-3">${post.data.title}</h3>
-            <article class="media">
+            <article class="media" id="read_post_container">
 
                 <figure class="media-left">
                     <p class="image is-64x64">
@@ -68,13 +93,13 @@ let PostContent = {
                 
                 <div class="media-content">
                     <div class="content">
-                    <p>
-                        <strong>${post.data.user_nick}</strong> 
-                        <i class="far fa-clock"></i>
-                        <small>31m ago</small>
-                        <br>
-                    </p>
-                    
+                        <p>
+                            <strong>${post.data.user_nick}</strong> 
+                            <i class="far fa-clock"></i>
+                            <small>31m ago</small>
+                            <br>
+                        </p>
+                        
                     ${post.data.content}
                     </div>
                     <nav class="level is-mobile">
@@ -104,6 +129,53 @@ let PostContent = {
                 </div>
                 
             </article>
+            <article id="edit_post_container" class="is-hidden">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" id="post_edit_title_input" type="text" placeholder="Enter your Title of your Post" value="${post.data.title}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </p>
+                    <p class="help is-danger">This email is invalid</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Link (Optional)</label>
+                    <p class="control has-icons-left">
+                        <input class="input" id="post_edit_link_input" type="text" placeholder="Enter the link to a website that you are posting about" value="${post.data.link}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                    <p class="help is-danger">This email is invalid</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Content</label>
+                    <textarea class="textarea" id="post_edit_content_input" placeholder="Enter a Content of your Post" >${post.data.content}</textarea>
+                    <p class="help is-danger">This email is invalid</p>
+                </div>
+
+                <nav class="level is-mobile">
+                        <div class="level-left">
+                            <a class="level-item" id="post_edit_submit">
+                                <span class="icon is-small"><i class="far fa-heart"></i></span>
+                                &nbsp Submit &nbsp
+                            </a>
+                        </div>
+                        <div class="level-right is-hidden" data-visible-to="${post.data.user_id}">
+                            <a class="level-item" id="post_edit_cancel" >
+                                <span class="icon is-small"><i class="fas fa-edit"></i></span>
+                                &nbsp Cancel &nbsp
+                            </a>
+                        </div>
+                    </nav>
+            </article>
             <article class="media is-hidden" id="post_comment_field">
                 <figure class="media-left">
                     <p class="image is-64x64">
@@ -126,13 +198,12 @@ let PostContent = {
                     </nav>
                 </div>
             </article>
-
-            ${await PostEditControls.render(post.data.title, post.data.link, post.data.content)}
-
         `
         return view
     },
     after_render: async () => {
+        let flash       = document.getElementById("error_flash");
+
         // Default visibility of elements for the current user
         let current_user_id = window.localStorage['_user_id']
         document.querySelectorAll('[data-visible-to="' + CSS.escape(current_user_id) + '"]').forEach(node => {
@@ -158,21 +229,43 @@ let PostContent = {
         
         document.getElementById("post_edit_btn").addEventListener('click', async (e) => {
             console.log("Edit was clicked")
+            document.getElementById("read_post_container").classList.toggle('is-hidden')
+            document.getElementById("edit_post_container").classList.toggle('is-hidden')
+        })
+        
+        document.getElementById("post_edit_cancel").addEventListener('click', async (e) => {
+            console.log("Edit was clicked")
+            document.getElementById("read_post_container").classList.toggle('is-hidden')
+            document.getElementById("edit_post_container").classList.toggle('is-hidden')
         })
 
         document.getElementById("post_delete_btn").addEventListener('click', async (e) => {
             console.log("Delete was clicked")
         })
 
+        document.getElementById("post_edit_submit").addEventListener("click", async (e) => {
+            let post_title_text     = document.getElementById("post_edit_title_input").value
+            let post_link_text      = document.getElementById("post_edit_link_input").value
+            let post_content_text   = document.getElementById("post_edit_content_input").value
+            let result = await changePost(Utils.parseRequestURL().id, post_title_text, post_link_text, post_content_text)
+            if (result.status == 'success') {
+                console.log(`Update Succeeded: ${result}`)
+                // window.location.hash = `/p/${result.data.unqid}`
+            } else {
+                console.log(`Update Failed: ${result.errorMessage}`)
+                flash.classList.toggle('is-hidden')
+                flash.innerText = `${result.message}`
+            }
+        })
+
         document.getElementById("post_reply_submit").addEventListener("click", async (e) => {
             let post_reply_text = document.getElementById("post_reply_txt").value
             let result = await saveComment(Utils.parseRequestURL().id, '', post_reply_text)
             if (result.status == 'success') {
-                console.log(`Update Succeeded: ${result.errorMessage}`)
+                console.log(`Update Succeeded: ${result}`)
             } else {
                 console.log(`Update Failed: ${result.errorMessage}`)
-                flash.setAttribute('data-state', 'shown')
-                flash.style.display = 'block'
+                flash.classList.toggle('is-hidden')
                 flash.innerText = `${result.message}`
             }
 

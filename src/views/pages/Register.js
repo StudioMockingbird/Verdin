@@ -31,6 +31,7 @@ let Register = {
     render: async () => {
         return /*html*/ `
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <div class="field">
                     <p class="control has-icons-left has-icons-right">
                         <input class="input" id="email_input" type="email" placeholder="Enter your Email">
@@ -103,6 +104,8 @@ let Register = {
                     alert (`User with emailid ${email} was successfully created`)
                 } else {
                     alert (`Failed: ${result.message}`)
+                    flash.classList.toggle('is-hidden')
+                    flash.innerText = `${result.message}`
                 }
 
                 // alert(`User with email ${email.value} was successfully submitted!`)

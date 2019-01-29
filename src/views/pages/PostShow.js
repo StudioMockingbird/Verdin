@@ -41,6 +41,7 @@ let PostShow = {
         if (post.status == "success") {
             return /*html*/`
                 <section class="section pageEntry">
+                    <div id="error_flash" class="notification is-danger is-hidden" ></div>
                     ${ await PostContent.render(post)}
       
                     <article class="media">
