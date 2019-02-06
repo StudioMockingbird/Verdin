@@ -29,7 +29,9 @@ let create_post = async (title, link, content, tags) => {
 
 let PostNew = {
     onlyAllow: 'user',
-    render : async () => {
+    state: {},
+    load: async function () {}, 
+    render : async function () {
         let view =  /*html*/`
             <section class="section pageEntry">
                 <div id="error_flash" class="notification is-danger is-hidden" ></div>
@@ -77,11 +79,11 @@ let PostNew = {
         `
         return view
     },
-    after_render:  async () => {
+    control:  async function () {
         let flash       = document.getElementById("error_flash");
         
         // Run the after renders for the embedded components
-        TagsInput.after_render()
+        TagsInput.control()
 
         
         document.getElementById("newpost_submit_btn").addEventListener ("click", async () => {

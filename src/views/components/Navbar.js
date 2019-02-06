@@ -1,5 +1,5 @@
 let Navbar = {
-    render: async () => {
+    render: async function () {
         let view =  /*html*/`
              <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="container">
@@ -93,7 +93,7 @@ let Navbar = {
         `
         return view
     },
-    after_render: async () => { }
+    control: async function () { }
 
 }
 

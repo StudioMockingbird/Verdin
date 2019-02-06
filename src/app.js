@@ -56,9 +56,9 @@ const router = async () => {
     
     // Render the Header, Flash and footer of the page
     header.innerHTML = await Navbar.render();
-    await Navbar.after_render();
+    await Navbar.control();
     footer.innerHTML = await Bottombar.render();
-    await Bottombar.after_render();
+    await Bottombar.control();
 
     // Get the parsed URl from the addressbar
     let request = Utils.parseRequestURL()
@@ -87,8 +87,12 @@ const router = async () => {
         // console.log('Only Anon')
         page = !window.localStorage['_user_email'] ? page : Home
     } 
+    // load page data
+    await page.load();
+    // render page view
     content.innerHTML = await page.render();
-    await page.after_render();
+    // register page controls
+    await page.control();
 
     document.getElementById('progress-bar').style.transition='width 0.2s';
     progressbar_setWidth('100%')

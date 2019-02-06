@@ -31,4 +31,7 @@ Services - Routes:
 	- reportPost
 	- reportComment
 
-
+<!-- use e.target everywhere
+button.addEventListener(‘click’, event => {
+ event.target.classList.toggle(‘on’);
+}); -->

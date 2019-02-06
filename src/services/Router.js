@@ -42,9 +42,9 @@ const router = async () => {
     
     // Render the Header and footer of the page
     header.innerHTML = await Navbar.render();
-    await Navbar.after_render();
+    await Navbar.control();
     footer.innerHTML = await Bottombar.render();
-    await Bottombar.after_render();
+    await Bottombar.control();
 
 
     // Get the parsed URl from the addressbar
@@ -57,7 +57,7 @@ const router = async () => {
     // If the parsed URL is not in our list of supported routes, select the 404 page instead
     let page = routes[parsedURL] ? routes[parsedURL] : Error404
     content.innerHTML = await page.render();
-    await page.after_render();
+    await page.control();
 
     progressbar_setWidth('100%')
   

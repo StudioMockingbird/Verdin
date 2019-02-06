@@ -34,7 +34,9 @@ let getPost = async (post_id) => {
 
 let PostShow = {
     onlyAllow: 'all',
-    render : async () => {
+    state: {},
+    load: async function () {},
+    render : async function () {
         let request = Utils.parseRequestURL()
         let post = await getPost(request.id)
 
@@ -52,7 +54,8 @@ let PostShow = {
 
                     <!-- ${ await LikePost.render(post.data.liked_count)} -->
 
-                    ${ await CommentsTree.render(request.id)}
+                    ${ await CommentsTree.load(request.id)}
+                    ${ await CommentsTree.render()}
 
                 </section>
             `
@@ -63,12 +66,12 @@ let PostShow = {
         }
         
 
-    }
-    , after_render: async () => {
-        await PostContent.after_render()
-        // await LikePost.after_render()
-        await TagsList.after_render()
-        await CommentsTree.after_render()
+    },
+    control: async function () {
+        await PostContent.control()
+        // await LikePost.control()
+        await TagsList.control()
+        await CommentsTree.control()
 
     }
 }

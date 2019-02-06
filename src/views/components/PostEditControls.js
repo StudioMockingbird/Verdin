@@ -1,5 +1,5 @@
 let PostEditControls = {
-    render: async (title, link, content) => {
+    render: async function(title, link, content) {
         let view =  /*html*/`
         <article>
             <div class="field">
@@ -44,7 +44,7 @@ let PostEditControls = {
         `
         return view
     },
-    after_render: async () => { }
+    control: async function () { }
 
 }
 

@@ -1,9 +1,8 @@
 let Card = {
     // Only add shareable state here so that any other component can query the current value of state
-    state : {
-    },
-
-    render: async (post) => {
+    state : {},
+    load: async function () {},
+    render: async function (post) {
         // console.log(post)
         let view =  /*html*/`                
             <div class="column is-half">
@@ -50,7 +49,7 @@ let Card = {
         `
         return view
     },
-    after_render: async () => {
+    control: async function () {
         // Handle controls for the post
         // document.getElementById("post_like_btn").addEventListener('click', async (e) => {
         //     console.log("Like was clicked")

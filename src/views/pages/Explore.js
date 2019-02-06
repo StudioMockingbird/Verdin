@@ -30,8 +30,9 @@ let getPostsByTags = async (plusTags, minusTags) => {
 
 let Explore = {
     onlyAllow: 'all',
-    render: async () => {
-
+    state: {},
+    load: async function (){
+        
         // Split the tags query string into lists of chosen or rejected tags
         let tagsQueryStringFromURL = Utils.parseRequestURL().id
         let tagsSplitForPlus = tagsQueryStringFromURL.split("+")
@@ -62,15 +63,18 @@ let Explore = {
         console.log("rejected : " + rejectedTags)
 
      
-        let result = await getPostsByTags(chosenTags, rejectedTags)
-        if (result.status == "success") {
-            let posts = result.data
+        this.state = await getPostsByTags(chosenTags, rejectedTags)
+    },
+    render: async function () {
+
+        if (this.state.status == "success") {
+            let posts = this.state.data
             // Since I cannot use async-await with maps, It is beter to preprender the cards and then add them to the template
             let cards = await Promise.all(posts.map( (post) => Card.render(post)))
             let view =  /*html*/`
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <h1> Exploring </h1>
-                <h4>  </h4>
                 <div class="columns is-multiline" id="cards_container">
                 ${cards.join('\n ')}
                 </div>
@@ -81,8 +85,8 @@ let Explore = {
             console.log(result)
         }
 
-    }
-    , after_render: async () => {
+    },
+    control: async function () {
     }
 
 }

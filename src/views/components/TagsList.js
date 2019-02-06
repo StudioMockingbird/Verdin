@@ -29,7 +29,7 @@ let TagsList = {
         selectedTags: []
     },
 
-    render: async (tagsObj) => {
+    render: async function (tagsObj) {
         console.log(tagsObj)
         let view =  /*html*/`                
             <div class="field is-grouped is-grouped-multiline">
@@ -52,7 +52,7 @@ let TagsList = {
         `
         return view
     },
-    after_render: async () => {
+    control: async function () {
         // Get the post id
         // let postId = Utils.parseRequestURL().id
 

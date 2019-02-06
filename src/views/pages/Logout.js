@@ -19,15 +19,18 @@ let logoutUser = async () => {
 
 let Logout = {
     onlyAllow: 'user',
-    render : async () => {
+    state: {},
+    load: async function () {},
+    render : async function () {
         let view =  /*html*/`
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <h1> Goodbye! Logging you out... </h1>
             </section>
         `
         return view
     },
-    after_render: async () => {
+    control: async function () {
         let result  = await logoutUser()
         let store   = window.localStorage
         if (result.status == "success") {

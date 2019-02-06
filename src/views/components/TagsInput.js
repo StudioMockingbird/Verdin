@@ -26,7 +26,7 @@ let TagsInput = {
         selectedTags: []
     },
 
-    render: async () => {
+    render: async function () {
         let view =  /*html*/`                
             <div class="field">
                 <label class="label">Tags</label>
@@ -50,7 +50,7 @@ let TagsInput = {
         `
         return view
     },
-    after_render: async () => {
+    control: async function () {
         let tagStore = await get_available_tags()
         console.log(tagStore.data)
         let matchedTags = []

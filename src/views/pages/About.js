@@ -1,14 +1,17 @@
 let About = {
     onlyAllow: 'user',
-    render : async () => {
+    state:{},
+    load : function () {},
+    render : async function () {
         let view =  /*html*/`
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <h1> About </h1>
             </section>
         `
         return view
     },
-    after_render: async () => {}
+    control: async function () {}
         
 }
 

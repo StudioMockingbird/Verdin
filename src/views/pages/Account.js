@@ -89,12 +89,17 @@ let Account = {
     // --------------------------------
     onlyAllow: 'user',
 
+    state: {},
+
+    load: async function() {},
+
     // --------------------------------
     //  HTML view
     // --------------------------------
-    render: async () => {
+    render: async function () {
         let view =  /*html*/`
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <div class="card">
                     <div class="card-header"><p class="card-header-title">Update Profile Info</p>
                     </div>
@@ -178,7 +183,7 @@ let Account = {
     // --------------------------------
     //  Controllers
     // --------------------------------
-    after_render: async () => {
+    control: async function () {
         // Create a simple accordian component
         document.querySelectorAll('a[data-type="accordian-link"]').forEach(link => link.addEventListener('click', async (e) => {
             let accordian_body = link.closest("article").getElementsByClassName("message-body")[0];

@@ -23,14 +23,18 @@ let getPostsList = async () => {
 
 let Home = {
     onlyAllow: 'all',
-    render: async () => {
-        let result = await getPostsList()
-        if (result.status == "success") {
-            let posts = result.data
+    state: {},
+    load: async function () {
+        this.state = await getPostsList()
+    },
+    render: async function () {
+        if (this.state.status == "success") {
+            let posts = this.state.data
             // Since I cannot use async-await with maps, It is beter to preprender the cards and then add them to the template
             let cards = await Promise.all(posts.map( (post) => Card.render(post)))
             let view =  /*html*/`
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <h1> Home </h1>
                 
                 <div class="columns is-multiline" id="cards_container">
@@ -40,11 +44,11 @@ let Home = {
             `
             return view
         } else {
-            console.log(result)
+            console.log(this.state)
         }
 
-    }
-    , after_render: async () => {
+    },
+    control: async function () {
     }
 
 }

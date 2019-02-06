@@ -27,8 +27,9 @@ let create_user = async (email, nick, password) => {
 
 let Register = {
     onlyAllow: 'anon',
-
-    render: async () => {
+    state: {},
+    load: async function () {}, 
+    render: async function () {
         return /*html*/ `
             <section class="section pageEntry">
                 <div id="error_flash" class="notification is-danger is-hidden" ></div>
@@ -84,10 +85,10 @@ let Register = {
 
             </section>
         `
-    }
+    },
     // All the code related to DOM interactions and controls go in here.
     // This is a separate call as these can be registered only after the DOM has been painted
-    , after_render: async () => {
+    control: async function () {
         document.getElementById("register_submit_btn").addEventListener ("click", async () => {
             let email       = document.getElementById("email_input").value;
             let nick        = document.getElementById("nickname_input").value;

@@ -22,9 +22,12 @@ let login_user = async (email, password) => {
 }
 let Login = {
     onlyAllow: 'anon',
-    render: async () => {
+    state: {},
+    load: async function () {},
+    render: async function () {
         return /*html*/ `
             <section class="section pageEntry">
+                <div id="error_flash" class="notification is-danger is-hidden" ></div>
                 <!-- <form id="login_form"> -->
                     <div class="field">
                         <p class="control has-icons-left has-icons-right">
@@ -62,10 +65,10 @@ let Login = {
                 <!-- </form> -->
             </section>
         `
-    }
+    },
     // All the code related to DOM interactions and controls go in here.
     // This is a separate call as these can be registered only after the DOM has been painted
-    , after_render: async () => {
+    control: async function () {
         document.getElementById("login_submit_btn").addEventListener ("click", async () => {
             let email       = document.getElementById("email_input").value;
             let pass        = document.getElementById("pass_input").value;

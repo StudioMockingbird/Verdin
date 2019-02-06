@@ -53,12 +53,11 @@ let CommentsTree = {
     // Only add shareable state here so that any other component can query the current value of state
     state : {
     },
-
-    render: async (postId) => {
+    load: async function(postId) {
         let comments = await getComments(postId)
-        let comments_tree = await Utils.list_to_tree(comments.data)
-        console.log(comments_tree)
-
+        this.state = await Utils.list_to_tree(comments.data)
+    },
+    render: async function() {
         let comment_component =  (cdata) => 
         /*html*/`   
             <article class="media">
@@ -117,9 +116,9 @@ let CommentsTree = {
         let view = 
             /*html*/`            
                 <section class="section" id="commentstree_container">    
-                ${ comments_tree.length > 0 
+                ${ this.state.length > 0 
                 ?
-                comments_tree.map(comment => 
+                this.state.map(comment => 
                     comment_component(comment)
     
                     ).join('')
@@ -138,7 +137,7 @@ let CommentsTree = {
             `
         return view
     },
-    after_render: async () => {
+    control: async function () {
 
         // Handle the event when user types in the input and show the matched tags in the dropdown
         document.getElementById('commentstree_container').addEventListener('click', async (e) => {

@@ -29,7 +29,7 @@ let LikePost = {
         selectedTags: []
     },
 
-    render: async (count) => {
+    render: async function (count) {
         let view =  /*html*/`                
             <a class="button is-danger is-outlined" id="like_post_btn">
                 <span class="icon is-small">
@@ -40,7 +40,7 @@ let LikePost = {
         `
         return view
     },
-    after_render: async () => {
+    control: async function () {
         // Get the post id
         let postId = Utils.parseRequestURL().id
 
