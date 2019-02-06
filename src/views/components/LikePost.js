@@ -49,11 +49,12 @@ let LikePost = {
 
             let result = await likePost(postId)
             if (result.status == 'success') {
-                console.log('Post liked')
-            } else if (result.status == 401) {
-                console.log("401 came")
+                console.log(`Update Succeeded: ${result}`)
+                // window.location.hash = `/p/${result.data.unqid}`
             } else {
-                console.log (`Like Failed: ${result.message}`)
+                console.log(`Update Failed: ${result.errorMessage}`)
+                flash.classList.toggle('is-hidden')
+                flash.innerText = `${result.message}`
             }
         })
     }

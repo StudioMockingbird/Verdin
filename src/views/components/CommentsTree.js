@@ -56,10 +56,12 @@ let CommentsTree = {
     load: async function(postId) {
         let comments = await getComments(postId)
         this.state = await Utils.list_to_tree(comments.data)
+        return ''
     },
-    render: async function() {
+    render: async function(cdata) {
         let comment_component =  (cdata) => 
         /*html*/`   
+ 
             <article class="media">
                 <figure class="media-left">
                     <p class="image is-64x64">
@@ -115,7 +117,29 @@ let CommentsTree = {
 
         let view = 
             /*html*/`            
-                <section class="section" id="commentstree_container">    
+                <div id="commentstree_container">    
+                    <article id="post_comment_field" class="media is-hidden" data-input-controls-for-comment="none">
+                        <figure class="media-left">
+                            <p class="image is-64x64">
+                            <img src="https://bulma.io/images/placeholders/128x128.png">
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="field">
+                                <p class="control">
+                                    <textarea class="textarea" placeholder="Add a comment..." data-text-input-for-comment="none"></textarea>
+                                </p>
+                            </div>
+                            <nav class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <a class="button is-info" data-submit-button-for-comment="none">Submit</a>
+                                    </div>
+                                </div>
+                    
+                            </nav>
+                        </div>
+                    </article>
                 ${ this.state.length > 0 
                 ?
                 this.state.map(comment => 
@@ -124,16 +148,12 @@ let CommentsTree = {
                     ).join('')
                 :
                 /*html*/`
-                    <article class="media">
-                        <div class="media-content">
-                            <div class="content">
-                                <p> This post has no comments </p>
-                            </div>
-                        </div>
-                    </article>    
+
+                <p> This post has no comments </p>
+ 
                 `   
                 }
-                </section>        
+                </div>        
             `
         return view
     },
@@ -162,7 +182,8 @@ let CommentsTree = {
                         alert (`The content cannot be empty`)
                     } else {
                         console.log("Submitting comment", content)
-                        let result = await saveComment(Utils.parseRequestURL().id, commentid, content)
+                        let cid = (commentid == "none") ? '' : commentid
+                        let result = await saveComment(Utils.parseRequestURL().id, cid, content)
                         if (result.status == "success") {
         
                             // console.log(result)
