@@ -151,10 +151,11 @@ let PostShow = {
                     </div>
                     <hr>
                     <nav class="level is-mobile">
-                        <div class="level">
+                        <div class="level-left">
                             <a class="level-item" id="post_like_btn" data-visible-to="${this.state.data.user_id}">
-                                <span class="icon is-small"><i class="far fa-heart"></i></span>
-                                &nbsp Like &nbsp
+                                <span id="like_empty_icon" class="icon is-small"><i class="far fa-heart"></i></span>
+                                <span id="like_colored_icon" class="icon has-text-danger is-small is-hidden"><i class="fas fa-heart"></i></span>
+                                &nbsp (${this.state.data.likes}) &nbsp Like &nbsp
                             </a>
                             <a class="level-item" id="post_reply_toggle_btn">
                                 <span class="icon is-small"><i class="far fa-comment-alt"></i></span>
@@ -182,6 +183,18 @@ let PostShow = {
                                 &nbsp Delete &nbsp
                             </a>
                         </div>
+                         <div class="level-right">
+                            <a class="level-item" id="post_like_btn" data-visible-to="${this.state.data.user_id}">
+                                <span id="like_empty_icon" class="icon is-small"><i class="far fa-heart"></i></span>
+                                <span id="like_colored_icon" class="icon has-text-danger is-small is-hidden"><i class="fas fa-heart"></i></span>
+                                 &nbsp Flag &nbsp
+                            </a>
+
+                            <a class="level-item" id="post_reply_toggle_btn" data-visible-to="${this.state.data.user_id}">
+                                <span class="icon is-small"><i class="far fa-bookmark"></i></span>
+                                &nbsp Report &nbsp
+                            </a>
+
                     </nav>
                     <hr>
                     <article class="media">
@@ -206,15 +219,14 @@ let PostShow = {
 
     },
     control: async function () {
-        // Default visibility of elements for the current user
-        let current_user_id = window.localStorage['_user_id']
-        document.querySelectorAll('[data-visible-to="' + CSS.escape(current_user_id) + '"]').forEach(node => {
-            node.classList.toggle('is-hidden')
-        })
 
         document.getElementById("post_like_btn").addEventListener('click', async (e) => {
             // ensure user is logged in to use this action
                 // utils.redirect_to_login_if_not_loggedin()
+
+            document.getElementById("like_empty_icon").classList.toggle('is-hidden')
+            document.getElementById("like_colored_icon").classList.toggle('is-hidden')
+
             let request = Utils.parseRequestURL()
             let result = await likePost(request.id)
             if (result.status == 'success') {
@@ -288,6 +300,12 @@ let PostShow = {
         await TagsList.control()
         await CommentsTree.control()
 
+        // Default visibility of elements for the current user
+        let current_user_id = window.localStorage['_user_id']
+        document.querySelectorAll('[data-visible-to="' + CSS.escape(current_user_id) + '"]').forEach(node => {
+            node.classList.toggle('is-hidden')
+        })
+        
     }
 }
 
