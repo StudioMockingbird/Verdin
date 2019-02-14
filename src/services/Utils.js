@@ -62,6 +62,11 @@ const Utils = {
         })
         // console.log(tree)
         return tree;
+    },
+
+    list_to_obj: async (docs) => {
+    
+        return docs.reduce((obj, item) => (obj[item.unqid] = item, obj) ,{});
     }
 }
 

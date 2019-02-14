@@ -1,10 +1,6 @@
 import Utils        from './../../services/Utils.js'
 
-import LikePost     from '../components/LikePost.js' 
 import TagsList     from '../components/TagsList.js' 
-import PostContent  from '../components/PostContent.js' 
-import PostEdit     from '../components/PostEdit.js' 
-
 import Error404     from './Error404.js'
 import CommentsTree from '../components/CommentsTree.js';
 

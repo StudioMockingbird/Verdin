@@ -72,65 +72,20 @@ let likeComment = async (comment_id) => {
    }
 }
 
-let read_comment_view =  (comment) => 
+let read_comment_view = (comment) => 
     /*html*/`   
-    <article class="media">
-        <figure class="media-left">
-            <p class="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/96x96.png">
-            </p>
-        </figure>
-        <div class="media-content">
-            <div class="content">
-                <p>
-                    <strong>${cdata.user_nick} </strong>
-                    <i class="far fa-clock"></i>
-                    <small>31m ago</small>
-                    <br>
-                    ${cdata.content}
-                    <br>
-                    <small>
-                        <a data-like-link-for-comment="${cdata.unqid}">Like</a> · 
-                        <a data-reply-link-for-comment="${cdata.unqid}">Reply</a> · 
-                        <a data-like-link-for-comment="${cdata.unqid}">Bookmark</a> · 
-                        <a data-reply-link-for-comment="${cdata.unqid}">Edit</a> · 
-                        <a data-reply-link-for-comment="${cdata.unqid}">Delete</a> · 
-                        <a data-like-link-for-comment="${cdata.unqid}">Flag</a> · 
-                        <a data-reply-link-for-comment="${cdata.unqid}">Report</a> · 
-                        2 hrs ago
-                    </small>
-                </p>
-                
-            </div>
-            <!-- This bit adds the textbox and submit buttons to add a new comment to the tree. its hidden by default. -->
-            <article class="media is-hidden" data-input-controls-for-comment="${cdata.unqid}">
-                <figure class="media-left">
-                    <p class="image is-64x64">
-                    <img src="https://bulma.io/images/placeholders/128x128.png">
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="field">
-                        <p class="control">
-                            <textarea class="textarea" placeholder="Add a comment..." data-text-input-for-comment="${cdata.unqid}"></textarea>
-                        </p>
-                    </div>
-                    <nav class="level">
-                        <div class="level-left">
-                            <div class="level-item">
-                                <a class="button is-info" data-submit-button-for-comment="${cdata.unqid}">Submit</a>
-                            </div>
-                        </div>
-            
-                    </nav>
-                </div>
-            </article>
-            ${ cdata.children.map(comment => {
-                    return comment_component(comment)
-                }).join('')
-            }
-        </div>
-    </article>
+    <span>
+    ${comment.content}
+    </span>
+`
+
+let edit_comment_view = (comment) => 
+    /*html*/`   
+    <br>
+    <div class="field">
+        <textarea class="textarea" id="post_edit_content_input" data-edit-input-for-comment="${comment.unqid}" >${comment.content}</textarea>
+
+    </div>
 `
 
 let CommentsTree = {
@@ -139,7 +94,13 @@ let CommentsTree = {
     },
     load: async function(postId) {
         let comments = await getComments(postId)
-        this.state = await Utils.list_to_tree(comments.data)
+        // Add the flat list to state to facilitate easy searching of comment content by id
+        this.state.all_comments_list = comments.data
+
+        // Add the comments tree for visual representation
+        this.state.all_comments_tree = await Utils.list_to_tree(comments.data)
+
+        // Return empty string. else it will try to render what is returned. Should look to improve this later
         return ''
     },
     render: async function(cdata) {
@@ -159,16 +120,20 @@ let CommentsTree = {
                             <i class="far fa-clock"></i>
                             <small>31m ago</small>
                             <br>
-                            ${cdata.content}
+                            <span data-comment-container-for-comment="${cdata.unqid}">
+                            ${read_comment_view(cdata)}
+                            </span>
                             <br>
                             <small>
-                                <a data-like-link-for-comment="${cdata.unqid}">Like</a> · 
-                                <a data-reply-link-for-comment="${cdata.unqid}">Reply</a> · 
-                                <a data-like-link-for-comment="${cdata.unqid}">Bookmark</a> · 
-                                <a data-reply-link-for-comment="${cdata.unqid}">Edit</a> · 
-                                <a data-reply-link-for-comment="${cdata.unqid}">Delete</a> · 
-                                <a data-like-link-for-comment="${cdata.unqid}">Flag</a> · 
-                                <a data-reply-link-for-comment="${cdata.unqid}">Report</a> · 
+                                <a data-like-link-for-comment="${cdata.unqid}">Like · </a>
+                                <a data-reply-link-for-comment="${cdata.unqid}">Reply · </a>
+                                <a data-bookmark-link-for-comment="${cdata.unqid}">Bookmark · </a>
+                                <a data-edit-link-for-comment="${cdata.unqid}">Edit · </a>
+                                <a class="is-hidden" data-edit-submit-for-comment="${cdata.unqid}">Submit · </a>
+                                <a class="is-hidden" data-edit-cancel-for-comment="${cdata.unqid}">Cancel · </a> 
+                                <a data-delete-link-for-comment="${cdata.unqid}">Delete · </a>
+                                <a data-flag-link-for-comment="${cdata.unqid}">Flag · </a>
+                                <a data-report-link-for-comment="${cdata.unqid}">Report · </a>
                                 2 hrs ago
                             </small>
                         </p>
@@ -230,9 +195,9 @@ let CommentsTree = {
                             </nav>
                         </div>
                     </article>
-                ${ this.state.length > 0 
+                ${ this.state.all_comments_tree.length > 0 
                 ?
-                this.state.map(comment => 
+                this.state.all_comments_tree.map(comment => 
                     comment_component(comment)
     
                     ).join('')
@@ -248,6 +213,11 @@ let CommentsTree = {
         return view
     },
     control: async function () {
+
+        // create a key value of the comments list for easy lookup
+        // This is done in the control stage so as not to delay rendering and as this data is only useful for controls
+        this.state.all_comments_keylist = await Utils.list_to_obj(this.state.all_comments_list)
+        // console.log(this.state.all_comments_keylist)
 
         // Handle the event when user types in the input and show the matched tags in the dropdown
         document.getElementById('commentstree_container').addEventListener('click', async (e) => {
@@ -278,6 +248,42 @@ let CommentsTree = {
                     // this bit is mainly for a smoother transition. Broken in chrome
                     document.querySelector(`[data-text-input-for-comment=${CSS.escape(commentid)}]`).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
                     document.querySelector(`[data-text-input-for-comment=${CSS.escape(commentid)}]`).focus();
+
+                } else if (e.target.hasAttribute('data-edit-link-for-comment')) {
+
+                    let commentid = e.target.getAttribute('data-edit-link-for-comment')
+                    console.log("Clicked on Edit for Comment", commentid)
+                    let container = document.querySelector(`[data-comment-container-for-comment=${CSS.escape(commentid)}]`);
+                    
+                    // Add the current comment content to the state object so that it can be used across all functions
+                    container.innerHTML = await edit_comment_view(this.state.all_comments_keylist[commentid])
+                    
+                    // Show the submit and cancel buttons. Hide the edit button
+                    document.querySelector(`[data-edit-link-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    document.querySelector(`[data-edit-submit-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    document.querySelector(`[data-edit-cancel-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    // container.classList.toggle('is-hidden')
+                    // // this bit is mainly for a smoother transition. Broken in chrome
+                    document.querySelector(`[data-edit-input-for-comment=${CSS.escape(commentid)}]`).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+                    document.querySelector(`[data-edit-input-for-comment=${CSS.escape(commentid)}]`).focus();
+
+                } else if (e.target.hasAttribute('data-edit-submit-for-comment')) {
+
+                    let commentid = e.target.getAttribute('data-edit-submit-for-comment')
+                    console.log("Clicked on Edit-Submit for Comment", commentid)
+                    let container = document.querySelector(`[data-comment-container-for-comment=${CSS.escape(commentid)}]`);
+
+                } else if (e.target.hasAttribute('data-edit-cancel-for-comment')) {
+
+                    let commentid = e.target.getAttribute('data-edit-cancel-for-comment')
+                    console.log("Clicked on Edit-Cancel for Comment", commentid)
+                    let container = document.querySelector(`[data-comment-container-for-comment=${CSS.escape(commentid)}]`);
+                    container.innerHTML = await read_comment_view(this.state.all_comments_keylist[commentid])
+
+                    // Show the submit and cancel buttons. Hide the edit button
+                    document.querySelector(`[data-edit-link-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    document.querySelector(`[data-edit-submit-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    document.querySelector(`[data-edit-cancel-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
 
                 } else if (e.target.hasAttribute('data-submit-button-for-comment')) {
                     let commentid = e.target.getAttribute('data-submit-button-for-comment')
