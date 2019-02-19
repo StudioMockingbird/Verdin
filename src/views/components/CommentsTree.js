@@ -72,6 +72,30 @@ let likeComment = async (comment_id) => {
    }
 }
 
+let changeComment = async (comment_id, content) => {
+    const payload = {
+        "comment_id"    : comment_id,
+        "new_content"   : content,
+    }
+
+    const options = {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    };
+   try {
+       const response = await fetch(`http://localhost:3000/update_comment`, options)
+       const json = await response.json();
+       console.log(json)
+       return json
+   } catch (err) {
+       console.log('Error getting documents', err)
+   }
+}
+
 let read_comment_view = (comment) => 
     /*html*/`   
     <span>
@@ -83,7 +107,7 @@ let edit_comment_view = (comment) =>
     /*html*/`   
     <br>
     <div class="field">
-        <textarea class="textarea" id="post_edit_content_input" data-edit-input-for-comment="${comment.unqid}" >${comment.content}</textarea>
+        <textarea class="textarea" data-edit-input-for-comment="${comment.unqid}" >${comment.content}</textarea>
 
     </div>
 `
@@ -221,6 +245,9 @@ let CommentsTree = {
 
         // Handle the event when user types in the input and show the matched tags in the dropdown
         document.getElementById('commentstree_container').addEventListener('click', async (e) => {
+            // register the flash component
+            let flash = document.getElementById('error_flash')
+
             if (e.target.tagName == 'A') {
                 if (e.target.hasAttribute('data-like-link-for-comment')) {
                     console.log("Clicked on Like for", e.target.getAttribute('data-like-link-for-comment'))
@@ -272,6 +299,32 @@ let CommentsTree = {
                     let commentid = e.target.getAttribute('data-edit-submit-for-comment')
                     console.log("Clicked on Edit-Submit for Comment", commentid)
                     let container = document.querySelector(`[data-comment-container-for-comment=${CSS.escape(commentid)}]`);
+                    let new_content = document.querySelector(`[data-edit-input-for-comment=${CSS.escape(commentid)}]`).value
+
+                    // Now set these updated values in the state
+                    this.state.all_comments_keylist[commentid].content = new_content
+
+                    console.log(this.state.all_comments_keylist[commentid])
+        
+                    // and rerender the read post view
+                    container.innerHTML = await read_comment_view(this.state.all_comments_keylist[commentid])
+        
+                    // and fire the api call to update the same in the db
+                    let result = await changeComment(commentid, new_content)
+                    if (result.status == 'success') {
+                        console.log(`Update Succeeded: ${result}`)
+                        // window.location.hash = `/p/${result.data.unqid}`
+                    } else {
+                        console.log(`Update Failed: ${result.message}`)
+                        flash.classList.toggle('is-hidden')
+                        flash.innerText = `${result.message}`
+                        flash.scrollIntoView({behavior: 'smooth'})
+                    }
+
+                    // Show the submit and cancel buttons. Hide the edit button
+                    document.querySelector(`[data-edit-link-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    document.querySelector(`[data-edit-submit-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
+                    document.querySelector(`[data-edit-cancel-for-comment=${CSS.escape(commentid)}]`).classList.toggle('is-hidden')
 
                 } else if (e.target.hasAttribute('data-edit-cancel-for-comment')) {
 
