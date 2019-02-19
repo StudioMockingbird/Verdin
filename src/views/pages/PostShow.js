@@ -124,7 +124,7 @@ let edit_post_view = async (post) => /*html*/`
 
         <div class="field">
             <label class="label">Content</label>
-            <textarea class="textarea" id="post_edit_content_input" placeholder="Enter a Content of your Post" >${post.content}</textarea>
+            <textarea class="textarea" id="post_edit_content_input" placeholder="Enter the Content of your Post" >${post.content}</textarea>
             <p class="help is-danger">This email is invalid</p>
         </div>
     </article>

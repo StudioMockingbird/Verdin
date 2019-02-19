@@ -96,6 +96,69 @@ let changeComment = async (comment_id, content) => {
    }
 }
 
+let comment_component =  (cdata) => 
+/*html*/`   
+
+    <article class="media" data-base-container-for-comment="${cdata.unqid}">
+        <figure class="media-left">
+            <p class="image is-64x64">
+            <img src="https://bulma.io/images/placeholders/96x96.png">
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <strong>${cdata.user_nick} </strong>
+                    <i class="far fa-clock"></i>
+                    <small>31m ago</small>
+                    <br>
+                    <span data-comment-container-for-comment="${cdata.unqid}">
+                    ${read_comment_view(cdata)}
+                    </span>
+                    <br>
+                    <small>
+                        <a data-like-link-for-comment="${cdata.unqid}">Like · </a>
+                        <a data-reply-link-for-comment="${cdata.unqid}">Reply · </a>
+                        <a data-bookmark-link-for-comment="${cdata.unqid}">Bookmark · </a>
+                        <a data-edit-link-for-comment="${cdata.unqid}">Edit · </a>
+                        <a class="is-hidden" data-edit-submit-for-comment="${cdata.unqid}">Submit · </a>
+                        <a class="is-hidden" data-edit-cancel-for-comment="${cdata.unqid}">Cancel · </a> 
+                        <a data-delete-link-for-comment="${cdata.unqid}">Delete · </a>
+                        <a data-flag-link-for-comment="${cdata.unqid}">Flag · </a>
+                        <a data-report-link-for-comment="${cdata.unqid}">Report · </a>
+                        2 hrs ago
+                    </small>
+                </p>
+                
+            </div>
+            <!-- This bit adds the textbox and submit buttons to add a new comment to the tree. its hidden by default. -->
+            <article class="media is-hidden" data-input-controls-for-comment="${cdata.unqid}">
+                <figure class="media-left">
+                    <p class="image is-64x64">
+                    <img src="https://bulma.io/images/placeholders/128x128.png">
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..." data-text-input-for-comment="${cdata.unqid}"></textarea>
+                        </p>
+                    </div>
+                    <small>
+                        <a data-submit-button-for-comment="${cdata.unqid}">Submit</a>
+                    </small>
+                </div>
+            </article>
+            <span data-child-comment-container-for-comment="${cdata.unqid}">
+            ${ cdata.children.map(comment => {
+                    return comment_component(comment)
+                }).join('')
+            }
+            </span>
+        </div>
+    </article>
+`
+
 let read_comment_view = (comment) => 
     /*html*/`   
     <span>
@@ -128,71 +191,6 @@ let CommentsTree = {
         return ''
     },
     render: async function(cdata) {
-        let comment_component =  (cdata) => 
-        /*html*/`   
- 
-            <article class="media">
-                <figure class="media-left">
-                    <p class="image is-64x64">
-                    <img src="https://bulma.io/images/placeholders/96x96.png">
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>${cdata.user_nick} </strong>
-                            <i class="far fa-clock"></i>
-                            <small>31m ago</small>
-                            <br>
-                            <span data-comment-container-for-comment="${cdata.unqid}">
-                            ${read_comment_view(cdata)}
-                            </span>
-                            <br>
-                            <small>
-                                <a data-like-link-for-comment="${cdata.unqid}">Like · </a>
-                                <a data-reply-link-for-comment="${cdata.unqid}">Reply · </a>
-                                <a data-bookmark-link-for-comment="${cdata.unqid}">Bookmark · </a>
-                                <a data-edit-link-for-comment="${cdata.unqid}">Edit · </a>
-                                <a class="is-hidden" data-edit-submit-for-comment="${cdata.unqid}">Submit · </a>
-                                <a class="is-hidden" data-edit-cancel-for-comment="${cdata.unqid}">Cancel · </a> 
-                                <a data-delete-link-for-comment="${cdata.unqid}">Delete · </a>
-                                <a data-flag-link-for-comment="${cdata.unqid}">Flag · </a>
-                                <a data-report-link-for-comment="${cdata.unqid}">Report · </a>
-                                2 hrs ago
-                            </small>
-                        </p>
-                        
-                    </div>
-                    <!-- This bit adds the textbox and submit buttons to add a new comment to the tree. its hidden by default. -->
-                    <article class="media is-hidden" data-input-controls-for-comment="${cdata.unqid}">
-                        <figure class="media-left">
-                            <p class="image is-64x64">
-                            <img src="https://bulma.io/images/placeholders/128x128.png">
-                            </p>
-                        </figure>
-                        <div class="media-content">
-                            <div class="field">
-                                <p class="control">
-                                    <textarea class="textarea" placeholder="Add a comment..." data-text-input-for-comment="${cdata.unqid}"></textarea>
-                                </p>
-                            </div>
-                            <nav class="level">
-                                <div class="level-left">
-                                    <div class="level-item">
-                                        <a class="button is-info" data-submit-button-for-comment="${cdata.unqid}">Submit</a>
-                                    </div>
-                                </div>
-                    
-                            </nav>
-                        </div>
-                    </article>
-                    ${ cdata.children.map(comment => {
-                            return comment_component(comment)
-                        }).join('')
-                    }
-                </div>
-            </article>
-        `
 
         let view = 
             /*html*/`            
@@ -209,21 +207,13 @@ let CommentsTree = {
                                     <textarea class="textarea" placeholder="Add a comment..." data-text-input-for-comment="none"></textarea>
                                 </p>
                             </div>
-                            <nav class="level">
-                                <div class="level-left">
-                                    <div class="level-item">
-                                        <a class="button is-info" data-submit-button-for-comment="none">Submit</a>
-                                    </div>
-                                </div>
-                    
-                            </nav>
+                            <a data-submit-button-for-comment="none">Submit</a>
                         </div>
                     </article>
                 ${ this.state.all_comments_tree.length > 0 
                 ?
                 this.state.all_comments_tree.map(comment => 
                     comment_component(comment)
-    
                     ).join('')
                 :
                 /*html*/`
@@ -248,6 +238,7 @@ let CommentsTree = {
             // register the flash component
             let flash = document.getElementById('error_flash')
 
+            // This style of event handling means we need to add only 1 listener instead of hundreds of them
             if (e.target.tagName == 'A') {
                 if (e.target.hasAttribute('data-like-link-for-comment')) {
                     console.log("Clicked on Like for", e.target.getAttribute('data-like-link-for-comment'))
@@ -261,8 +252,8 @@ let CommentsTree = {
                     // } else if (result.code == 401) {
                     //     console.log(result)
                     } else {
-                        console.log(`Update Failed: ${result.errorMessage}`)
-                        flash.setAttribute('data-state', 'shown')
+                        console.log(`Update Failed: ${result.message}`)
+                        flash.classList.toggle('is-hidden')
                         flash.style.display = 'block'
                         flash.innerText = `${result.message}`
                     }
@@ -346,20 +337,52 @@ let CommentsTree = {
                     if (content =='') {
                         alert (`The content cannot be empty`)
                     } else {
-                        console.log("Submitting comment", content)
-                        let cid = (commentid == "none") ? '' : commentid
-                        let result = await saveComment(Utils.parseRequestURL().id, cid, content)
-                        if (result.status == "success") {
-        
-                            // console.log(result)
-                            // alert("DINGUS")
-                            // TODO - if user has a back histroy, do window.history.back()
-                            window.location.hash = `/p/${result.data.post_id}`
-                        // } else if (result.code == 401) {
-                        //     console.log(result)
+                        let new_comment = {}
+                        // Add a temp id to this. This temp id is needed as we want to update this node later 
+                        // when the api response comes through
+                        new_comment.unqid = 'tempid' + Date.now()
+                        new_comment.content = content
+                        new_comment.children = []
+                        new_comment.user_nick = window.localStorage['_user_nickname']
+
+
+                        // the new comment is rendered differently if its a top level comment vs a child level comment
+                        let parentid = (commentid == "none") ? '' : commentid
+                        if (parentid) {
+                            document.querySelector(`[data-child-comment-container-for-comment=${CSS.escape(parentid)}]`).innerHTML = comment_component(new_comment)
+    
+                            let container = document.querySelector(`[data-input-controls-for-comment=${CSS.escape(parentid)}]`);
+                            container.classList.toggle('is-hidden')
+                            // this bit is mainly for a smoother transition. Broken in chrome
+                            document.querySelector(`[data-text-input-for-comment=${CSS.escape(parentid)}]`).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+
                         } else {
-                            console.log(`Update Failed: ${result.errorMessage}`)
-                            flash.setAttribute('data-state', 'shown')
+                            let new_comment_node = document.createRange().createContextualFragment(comment_component(new_comment))
+
+                            let commentstree_container = document.getElementById('commentstree_container')
+                            commentstree_container.insertBefore(new_comment_node, commentstree_container.childNodes[1])
+
+                            let component = document.getElementById('post_comment_field')
+                            component.classList.toggle('is-hidden')
+                            // and clean up the textarea in case user adds another root level comment
+                            document.querySelector(`[data-text-input-for-comment='none']`).value = ''
+
+                            // this bit is mainly for a smoother transition. Broken in chrome
+                            document.getElementById('commentstree_container').scrollIntoView({ behavior: 'smooth' })
+                        }
+                        let result = await saveComment(Utils.parseRequestURL().id, parentid, content)
+                        if (result.status == "success") {
+                            // add an empty children attribute to the result data as our map in render func expects this
+                            result.data.children =[]
+                            // now update the new comments and change their commentid from the temp value to what we get from api
+                            let temp_node = document.querySelector(`[data-base-container-for-comment=${CSS.escape(new_comment.unqid)}]`)
+                            let real_node = document.createRange().createContextualFragment(comment_component(result.data))
+                            console.log(real_node)
+                            temp_node.parentNode.replaceChild(real_node, temp_node);
+                            console.log("temp comment updated with real node")
+                        } else {
+                            console.log(`Update Failed: ${result.message}`)
+                            flash.classList.toggle('is-hidden')
                             flash.style.display = 'block'
                             flash.innerText = `${result.message}`
                         }
