@@ -6,7 +6,7 @@ let Card = {
         // console.log(post)
         let view =  /*html*/`                
             <div class="column is-half">
-                <div class="box">
+                <div class="box is-borderless is-shadowless">
                     <article class="media">
                         <figure class="media-left">
                             <p class="image is-128x128">

@@ -99,7 +99,7 @@ let changeComment = async (comment_id, content) => {
 let comment_component =  (cdata) => 
 /*html*/`   
 
-    <article class="media" data-base-container-for-comment="${cdata.unqid}">
+    <article class="media" style="margin-top:0px" data-base-container-for-comment="${cdata.unqid}">
         <figure class="media-left">
             <p class="image is-64x64">
             <img src="https://bulma.io/images/placeholders/96x96.png">
@@ -117,15 +117,15 @@ let comment_component =  (cdata) =>
                     </span>
                     <br>
                     <small>
-                        <a data-like-link-for-comment="${cdata.unqid}">Like · </a>
+                        <a class="has-text-danger" data-like-link-for-comment="${cdata.unqid}">Like · </a>
                         <a data-reply-link-for-comment="${cdata.unqid}">Reply · </a>
-                        <a data-bookmark-link-for-comment="${cdata.unqid}">Bookmark · </a>
-                        <a data-edit-link-for-comment="${cdata.unqid}">Edit · </a>
-                        <a class="is-hidden" data-edit-submit-for-comment="${cdata.unqid}">Submit · </a>
-                        <a class="is-hidden" data-edit-cancel-for-comment="${cdata.unqid}">Cancel · </a> 
-                        <a data-delete-link-for-comment="${cdata.unqid}">Delete · </a>
-                        <a data-flag-link-for-comment="${cdata.unqid}">Flag · </a>
-                        <a data-report-link-for-comment="${cdata.unqid}">Report · </a>
+                        <a class="has-text-grey-light" data-bookmark-link-for-comment="${cdata.unqid}">Bookmark · </a>
+                        <a class="has-text-grey-light" data-edit-link-for-comment="${cdata.unqid}">Edit · </a>
+                        <a class="has-text-grey-light is-hidden" data-edit-submit-for-comment="${cdata.unqid}">Submit · </a>
+                        <a class="has-text-grey-light is-hidden" data-edit-cancel-for-comment="${cdata.unqid}">Cancel · </a> 
+                        <a class="has-text-grey-light" data-delete-link-for-comment="${cdata.unqid}">Delete · </a>
+                        <a class="has-text-grey-light" data-flag-link-for-comment="${cdata.unqid}">Flag · </a>
+                        <a class="has-text-grey-light" data-report-link-for-comment="${cdata.unqid}">Report · </a>
                         2 hrs ago
                     </small>
                 </p>
@@ -388,6 +388,10 @@ let CommentsTree = {
                         }
         
                     }    
+                } else if (e.target.hasAttribute('data-report-link-for-comment')) {
+                        console.log("Report clicked for", e.target.getAttribute('data-report-link-for-comment'))
+                        document.getElementById('report_modal').classList.toggle('is-active')
+                    
                 }
             }
             e.stopPropagation();
