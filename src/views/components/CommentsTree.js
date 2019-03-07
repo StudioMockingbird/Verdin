@@ -1,4 +1,5 @@
 import Utils        from '../../services/Utils.js'
+import Report       from '../components/Report.js' 
 
 let getComments = async (post_id) => {
     const payload = {
@@ -231,6 +232,7 @@ let CommentsTree = {
         // create a key value of the comments list for easy lookup
         // This is done in the control stage so as not to delay rendering and as this data is only useful for controls
         this.state.all_comments_keylist = await Utils.list_to_obj(this.state.all_comments_list)
+
         // console.log(this.state.all_comments_keylist)
 
         // Handle the event when user types in the input and show the matched tags in the dropdown
@@ -389,8 +391,13 @@ let CommentsTree = {
         
                     }    
                 } else if (e.target.hasAttribute('data-report-link-for-comment')) {
-                        console.log("Report clicked for", e.target.getAttribute('data-report-link-for-comment'))
-                        document.getElementById('report_modal').classList.toggle('is-active')
+                    let commentid = e.target.getAttribute('data-report-link-for-comment')
+                    console.log("Report clicked for", e.target.getAttribute('data-report-link-for-comment'))
+                        document.getElementById("report_container").innerHTML = await Report.render("comment", 
+                        this.state.all_comments_keylist[commentid].user_nick, 
+                        this.state.all_comments_keylist[commentid].content, 
+                        this.state.all_comments_keylist[commentid].unqid);
+                    await Report.control();
                     
                 }
             }

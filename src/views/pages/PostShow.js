@@ -1,6 +1,7 @@
 import Utils        from './../../services/Utils.js'
 
 import TagsList     from '../components/TagsList.js' 
+import Report       from '../components/Report.js' 
 import Error404     from './Error404.js'
 import CommentsTree from '../components/CommentsTree.js';
 
@@ -145,49 +146,8 @@ let PostShow = {
                         ${ await read_post_view(this.state.data)} 
                     </div>
 
-                    <div class="modal" id="report_modal">
-                        <div class="modal-background" id="report_modal_bg"></div>
-                        <div class="modal-card">
-                            <header class="modal-card-head">
-                            <p class="modal-card-title">
-                                Report
-                                <span id="report_content_type">{comment/post}</span> 
-                                made by 
-                                <span id="report_content_user">{user}</span>
-                            </p>
-                            </header>
-                            <section class="modal-card-body">
-                                <code>
-                                {comment}
-                                </code>
-                                
-                                <br>
-                                <br>
-
-                                <div class="field">
-                                    <label class="label">Please state a reason.</label>
-                                    <div class="select">
-                                        <select>
-                                            <option>Select dropdown</option>
-                                            <option>With options</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-
-                                <div class="field">
-                                    <label class="label">Please add more details to the help the mods</label>
-                                    <textarea class="textarea" id="report_message_input" placeholder="Enter the Content of your Post" ></textarea>
-                                    <p class="help is-danger">This email is invalid</p>
-                                </div>
-
-                            </section>
-                            <footer class="modal-card-foot">
-                                <button class="button is-success" id="report_submit_btn">Save changes</button>
-                                <button class="button" id="report_cancel_btn">Cancel</button>
-                            </footer>
-                        </div>
-                    </div>
+                    <div id="report_container"></div>
+                    
                     <hr>
                     <nav class="level is-mobile">
                         <div class="level-left">
@@ -336,17 +296,13 @@ let PostShow = {
 
         document.getElementById("post_report_btn").addEventListener('click', async (e) => {
             console.log("Report clicked")
-            document.getElementById('report_modal').classList.toggle('is-active')
+            // document.getElementById('report_modal').classList.toggle('is-active')
+            document.getElementById("report_container").innerHTML = await Report.render("post", this.state.data.user_nick, 
+                this.state.data.content, this.state.data.unqid);
+            await Report.control();
         })
 
-        document.getElementById("report_modal_bg").addEventListener('click', async (e) => {
-            console.log("Report bg clicked")
-            document.getElementById('report_modal').classList.toggle('is-active')
-        })
-        document.getElementById("report_cancel_btn").addEventListener('click', async (e) => {
-            console.log("Report cancel clicked")
-            document.getElementById('report_modal').classList.toggle('is-active')
-        })
+
 
         // await PostContent.control()
         // await LikePost.control()
