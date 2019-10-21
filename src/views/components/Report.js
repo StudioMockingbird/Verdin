@@ -1,20 +1,20 @@
 
-let report_post = async (type, post_id, reason, details) => {
+let report_post = async (type, item_id, reason, details) => {
     let targetURL =''
+    let payload = {
+        "reason"    : reason,
+        "details"   : details,
+    }
+
     if (type == 'post') {
         targetURL = `http://localhost:3000/report_post`
+        payload.post_id = item_id
     } else if (type == 'comment') {
         targetURL = `http://localhost:3000/report_comment`
+        payload.comment_id = item_id
     } else {
         console.log('Could not get type of report')
     }
-    
-    const payload = {
-        "post_id"   : post_id,
-        "reason"    : reason,
-        "details"   : details,
-      }
-    
     const options = {
         method: 'POST',
         credentials: 'include',
@@ -96,12 +96,17 @@ let Report = {
         return view
     },
     control: async function () {
+        
+        // register the flash component
+        let flash = document.getElementById('error_flash')
+
         document.getElementById("report_modal_bg").addEventListener('click', async (e) => {
             console.log("Report bg clicked for")
             document.getElementById('report_modal').classList.toggle('is-active')
         })
 
         document.getElementById("report_submit_btn").addEventListener('click', async (e) => {
+            
             if (e.target.getAttribute('data-submit-report-for-post')) {
                 console.log("Report submit clicked for Post: ", e.target.getAttribute('data-submit-report-for-post'))
                 let post_id     = e.target.getAttribute('data-submit-report-for-post')
@@ -120,15 +125,38 @@ let Report = {
                         // window.location.hash = `/p/${result.data.unqid}`
                     } else {
                         console.log(`Update Failed: ${result.errorMessage}`)
-                        flash.setAttribute('data-state', 'shown')
-                        flash.style.display = 'block'
+                        flash.classList.toggle('is-hidden')
                         flash.innerText = `${result.message}`
+                        flash.scrollIntoView({behavior: 'smooth'})
                     }
     
                 } 
             } else if (e.target.getAttribute('data-submit-report-for-comment')) {
                 console.log("Report submit clicked for Comment: ", e.target.getAttribute('data-submit-report-for-comment'))
+                let comment_id     = e.target.getAttribute('data-submit-report-for-comment')
+                let reason      = document.getElementById("report_content_reason_input").value;
+                let details     = document.getElementById("report_content_details_input").value;
+                console.log(reason, details)
+                if (reason =='Select dropdown' || details == '') {
+                    alert (`The report cannot be empty`)
+                } else {
+                    let result = await report_post("comment", comment_id, reason, details)
+                    if (result.status == "success") {
+    
+                        console.log(result)
+                        // alert("DINGUS")
+                        // TODO - if user has a back histroy, do window.history.back()
+                        // window.location.hash = `/p/${result.data.unqid}`
+                    } else {
+                        console.log(`Update Failed: ${result.errorMessage}`)
+                        flash.classList.toggle('is-hidden')
+                        flash.innerText = `${result.message}`
+                        flash.scrollIntoView({behavior: 'smooth'})
+                    }
+    
+                } 
             }
+            document.getElementById('report_modal').classList.toggle('is-active')
         })
 
         document.getElementById("report_cancel_btn").addEventListener('click', async (e) => {

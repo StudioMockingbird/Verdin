@@ -89,7 +89,7 @@ let read_post_view = async (post) => /*html*/`
     <p style="">
     <figure  >
         <p class="image is-128x128">
-        <img src="http://via.placeholder.com/256x256">
+        <img src=${post.thumb ? post.thumb :"https://picsum.photos/200/300"}>
         </p>
     </figure>
     ${post.content}
