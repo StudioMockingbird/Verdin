@@ -79,21 +79,39 @@ let likePost = async (post_id) => {
    }
 }
 
-let read_post_view = async (post) => /*html*/`                
-    <h3 class="title is-3" id="post_title_label">${post.title}</h3>
-    by <strong>${post.user_nick}</strong> 
+let read_post_view = async (post) => /*html*/`    
+    <article class="media">
+    <figure class="media-left">
+        <button class="button is-large is-danger is-outlined"><i class="far fa-heart"></i></button>
+    </figure>
+    <div class="media-content">
+        <div class="content">
+            <h3 class="title is-3" id="post_title_label"> ${post.title}</h3>
+            by <strong>${post.user_nick}</strong> &nbsp | &nbsp
     <i class="far fa-clock"></i>
     <small>31m ago</small>
+        </div>
+    </div>
+    </article>
+
+
+    <!-- <h3 class="title is-3" id="post_title_label"><button class="button is-large"><i class="far fa-heart"></i></button> ${post.title}</h3> -->
+    <!-- by <strong>${post.user_nick}</strong> &nbsp | &nbsp
+    <i class="far fa-clock"></i>
+    <small>31m ago</small> -->
     <br>
     <br>
-    <p style="">
-    <figure  >
-        <p class="image is-128x128">
-        <img src=${post.thumb ? post.thumb :"https://picsum.photos/200/300"}>
-        </p>
-    </figure>
-    ${post.content}
-    </p>
+
+    <article class="media">
+        <figure class="image">
+            <img src=${post.thumb ? post.thumb : "https://picsum.photos/300/400"}>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                ${post.content}
+            </div>
+        </div>
+    </article>
 `
 
 let edit_post_view = async (post) => /*html*/`                

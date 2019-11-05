@@ -6,31 +6,43 @@ let Card = {
         // console.log(post)
         let view =  /*html*/`                
             <div class="column is-half">
-                <div class="box is-borderless is-shadowless">
+                <div class="box">
                     <article class="media">
                         <figure class="media-left">
                             <p class="image is-128x128">
-                            <img src="https://bulma.io/images/placeholders/128x128.png">
+                            <img src="https://picsum.photos/seed/${post.id}/128/128">
                             </p>
                         </figure>
                         <div class="media-content">
                             <div class="content">
-                            <p>
-                                ${post.title}
-                                <strong>${post.user_nick}</strong> <small>@johnsmith</small> <small>31m</small>
-                                <br>
+               
+                                <a href="#/p/${post.unqid}">
                                 ${  
-                                    // if content is greater than 150 chars long, truncate it and append "..."
-                                    post.content.length > 150 
+                                    // if title is greater than 150 chars long, truncate it and append "..."
+                                    post.title.length > 80 
                                     ?
-                                    (post.content).slice(0,150) + '...'
+                                    (post.title).slice(0,80) + '...'
                                     :
-                                    post.content
+                                    post.title
                                 }
-                            </p>
+                                </a>
+                               
+                                <br>
+
+                                <small>by <a href="#/u/${post.user_id}"> ${post.user_nick} </a> &nbsp | 
+                                    &nbsp <i class="far fa-clock"></i> 31m ago |
+                                    &nbsp <i class="far fa-comments"></i> 36 comments
+                                </small>
+                                <br>
+                                <br>
+                                <div class="tags">
+                                    <span class="tag is-link is-light">nature</span>
+                                    <span class="tag is-link is-light">politics</span>
+                                    <span class="tag is-link is-light">technology</span>
+                                </div>
                             </div>
                             <nav class="level is-mobile">
-                            <div class="level-left">
+                            <!-- <div class="level-left">
                                 <a class="level-item" href="#/p/${post.unqid}">
                                 <span class="icon is-small"><i class="fas fa-reply"></i></span>
                                 </a>
@@ -40,7 +52,7 @@ let Card = {
                                 <a class="level-item">
                                 <span class="icon is-small"><i class="fas fa-heart"></i></span>
                                 </a>
-                            </div>
+                            </div> -->
                             </nav>
                         </div>      
                     </article>
