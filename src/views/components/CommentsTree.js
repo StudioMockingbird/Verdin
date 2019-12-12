@@ -102,16 +102,17 @@ let comment_component =  (cdata) =>
 
     <article class="media" style="margin-top:0px" data-base-container-for-comment="${cdata.unqid}">
         <figure class="media-left">
-            <p class="image is-64x64">
+            <!-- <p class="image is-64x64">
             <img src="https://bulma.io/images/placeholders/96x96.png">
-            </p>
+            </p> -->
         </figure>
         <div class="media-content">
             <div class="content">
                 <p>
-                    <strong>${cdata.user_nick} </strong>
-                    <i class="far fa-clock"></i>
-                    <small>31m ago</small>
+
+                    <small class="has-text-grey-light">                    
+                        ${cdata.user_nick} said · 31m ago
+                    </small>
                     <br>
                     <span data-comment-container-for-comment="${cdata.unqid}">
                     ${read_comment_view(cdata)}
@@ -127,7 +128,6 @@ let comment_component =  (cdata) =>
                         <a class="has-text-grey-light" data-delete-link-for-comment="${cdata.unqid}">Delete · </a>
                         <a class="has-text-grey-light" data-flag-link-for-comment="${cdata.unqid}">Flag · </a>
                         <a class="has-text-grey-light" data-report-link-for-comment="${cdata.unqid}">Report · </a>
-                        2 hrs ago
                     </small>
                 </p>
                 
@@ -196,7 +196,7 @@ let CommentsTree = {
         let view = 
             /*html*/`            
                 <div id="commentstree_container">    
-                    <article id="post_comment_field" class="media is-hidden" data-input-controls-for-comment="none">
+                    <!-- <article id="post_comment_field" class="media is-hidden" data-input-controls-for-comment="none">
                         <figure class="media-left">
                             <p class="image is-64x64">
                             <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -210,7 +210,7 @@ let CommentsTree = {
                             </div>
                             <a data-submit-button-for-comment="none">Submit</a>
                         </div>
-                    </article>
+                    </article> -->
                 ${ this.state.all_comments_tree.length > 0 
                 ?
                 this.state.all_comments_tree.map(comment => 
