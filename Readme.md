@@ -1,0 +1,1 @@
+This repo contains the Vanillajs SPA for digglu.com
