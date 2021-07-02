@@ -1,4 +1,4 @@
-import Card    from '../components/Card.js' 
+import Card    from '../components/Post.js' 
 
 // --------------------------------
 //  Define Data Sources

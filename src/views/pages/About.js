@@ -1,5 +1,5 @@
 let About = {
-    onlyAllow: 'user',
+    onlyAllow: 'all',
     state:{},
     load : function () {},
     render : async function () {

@@ -1,8 +1,26 @@
 const Utils = { 
     // --------------------------------
+    //  Redirect to a given path with optional messages
+    // --------------------------------
+    redirectTo : ({path, booboomsg, happinessmsg}) => {
+        window.location = path 
+        window.onhashchange = function() {
+              if (booboomsg) {
+                document.getElementById("booboobar").classList.remove("hidden")
+                document.getElementById("booboobar_text").innerText = booboomsg
+            }
+
+            if (happinessmsg) {
+                document.getElementById("happybar").classList.remove("hidden")
+                document.getElementById("happybar_text").innerText = happinessmsg
+            }
+        }
+    }
+
+    // --------------------------------
     //  Parse a url and break it into resource, id and verb
     // --------------------------------
-    parseRequestURL : () => {
+    , parseRequestURL : () => {
 
         let url = location.hash.slice(1).toLowerCase() || '/';
         let r = url.split("/")

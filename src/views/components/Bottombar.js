@@ -1,4 +1,4 @@
-let Bottombar = {
+let ListsColumn = {
     render: async function () {
         let view =  /*html*/`
         <footer class="footer">
@@ -14,4 +14,4 @@ let Bottombar = {
     control: async function () { }
 }
 
-export default Bottombar;
+export default ListsColumn;
