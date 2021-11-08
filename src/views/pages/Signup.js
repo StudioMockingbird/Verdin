@@ -1,4 +1,5 @@
 import Utils from "../../services/Utils.js";
+import Progressbar  from '../components/Progressbar.js'
 
 let create_user = async (email, password) => {
     const payload = {
@@ -7,7 +8,7 @@ let create_user = async (email, password) => {
     };
     const options = {
         method: 'POST',
-        // mode: 'no-cors',
+        mode: 'no-cors',
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
@@ -16,7 +17,7 @@ let create_user = async (email, password) => {
         body: JSON.stringify(payload)
     };
     try {
-        const response = await fetch(`http://localhost:3000/api/v1/user/signup`, options)
+        const response = await fetch(`http://localhost:3000/api/v1/auth/signup/basic`, options)
         return response
     } catch (err) {
         console.log('ERROR RETURNED: ', err)
@@ -34,6 +35,21 @@ let Signup = {
                     <h2 class="text-center text-3xl font-extrabold text-gray-200 mb-2">
                         Create your new Digglu account
                     </h2>
+                    <!-- <div id="g_id_onload"
+                        data-client_id="326093643211-dh58srqtltvqfakqta4us0il2vgnkenr.apps.googleusercontent.com"
+                        data-login_uri="http://localhost:3000/api/v1/auth/callback/google"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-size="large"
+                        data-theme="outline"
+                        data-text="sign_in_with"
+                        data-shape="rectangular"
+                        data-logo_alignment="left">
+                    </div>
+                    <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div> -->
+
                     <input type="email" id="email_input" placeholder="&nbsp Enter your Email Address"
                         class="p-2 text-gray-700 w-full bg-secondary-light rounded placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:bg-background-light"/>
                     <label for="email_input" class="mt-2">
@@ -82,6 +98,31 @@ let Signup = {
     // All the code related to DOM interactions and controls go in here.
     // This is a separate call as these can be registered only after the DOM has been painted
     control: async function () {
+        // Add the gsi script tag to the page. This needs to be done dynamically else the script tag doesn't gets activated
+        // let googleSignInScriptFrag = document.createRange().createContextualFragment(`<script src="https://accounts.google.com/gsi/client" async defer></script>`);
+        // document.head.appendChild(googleSignInScriptFrag);
+
+        // let appleSignInScriptFrag = document.createRange().createContextualFragment(`
+        //     <meta name="appleid-signin-client-id" content="[CLIENT_ID]">
+        //     <meta name="appleid-signin-scope" content="[SCOPES]">
+        //     <meta name="appleid-signin-redirect-uri" content="[REDIRECT_URI]">
+        //     <meta name="appleid-signin-state" content="[STATE]">
+        //     <meta name="appleid-signin-nonce" content="[NONCE]">
+        //     <meta name="appleid-signin-use-popup" content="true"> <!-- or false defaults to false -->
+        // `);
+        // document.head.appendChild(appleSignInScriptFrag);
+        
+
+        // AppleID.auth.init({
+        //     clientId : '[CLIENT_ID]',
+        //     scope : '[SCOPES]',
+        //     redirectURI : '[REDIRECT_URI]',
+        //     state : '[STATE]',
+        //     nonce : '[NONCE]',
+        //     usePopup : true //or false defaults to false
+        // });
+
+
         document.getElementById("signup_submit_btn").addEventListener ("click", async () => {
             let email           = document.getElementById("email_input").value;
             let pass            = document.getElementById("pass_input").value;
@@ -93,7 +134,8 @@ let Signup = {
             } else if (email =='' | pass == '' | repeatPass == '') {
                 alert (`Fields cannot be empty`)
             } else {
-                Utils.progressbarSetWidth('60%', '1.5s')
+                // await Progressbar.control();
+                await Progressbar.animateStart();
                 let response = await create_user(email, pass)
                 switch (response.status) {
                     case 202:
@@ -111,6 +153,7 @@ let Signup = {
 
                         // Utils.redirectTo(`/#/about`, `this is a boo boo doll`)
                 }
+                await Progressbar.animateEnd();
             }    
         })
     }
